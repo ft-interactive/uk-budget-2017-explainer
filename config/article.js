@@ -11,21 +11,20 @@ export default (environment = 'development') => ({ // eslint-disable-line
   //       new Date('2016-05-17T17:11:22Z')
   publishedDate: new Date(),
 
-  headline: 'Politics and the English Language',
+  headline: 'Philip Hammond’s budget 2017',
 
   // summary === standfirst (Summary is what the content API calls it)
-  summary: 'Political language is designed to make lies sound truthful' +
-           'and murder respectable, and to give an appearance of solidity to pure wind',
+  summary: 'TKTK',
 
   topic: {
-    name: 'Starter Kit',
-    url: '/foo',
+    name: 'UK Budget',
+    url: 'https://www.ft.com/ukbudget',
   },
 
-  relatedArticle: {
-    text: 'Related article »',
-    url: 'https://en.wikipedia.org/wiki/Politics_and_the_English_Language',
-  },
+  // relatedArticle: {
+  //   text: 'Related article »',
+  //   url: 'https://en.wikipedia.org/wiki/Politics_and_the_English_Language',
+  // },
 
   mainImage: {
     title: '',
