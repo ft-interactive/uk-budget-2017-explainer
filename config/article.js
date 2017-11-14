@@ -32,10 +32,10 @@ export default (environment = 'development') => ({ // eslint-disable-line
     credit: '',
 
     // You can provide a UUID to an image and it was populate everything else
-    uuid: 'c4bf0be4-7c15-11e4-a7b8-00144feabdc0',
+    // uuid: 'c4bf0be4-7c15-11e4-a7b8-00144feabdc0',
 
     // You can also provide a URL
-    // url: 'https://image.webservices.ft.com/v1/images/raw/http%3A%2F%2Fcom.ft.imagepublish.prod.s3.amazonaws.com%2Fc4bf0be4-7c15-11e4-a7b8-00144feabdc0?source=ig&fit=scale-down&width=700',
+    url: 'http://interactivegraphics.ft-static.com/static/sites/2014/deficit-calculator/main-pic.jpg',
   },
 
   // Byline can by a plain string, markdown, or array of authors
