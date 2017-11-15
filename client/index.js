@@ -17,7 +17,6 @@ const chartContainer = document.querySelector('.deficit-chart');
 const chart = chartContainer.querySelector('.deficit-chart__figure');
 
 const chartData = JSON.parse(chartContainer.getAttribute('data-chart-data'));
-console.log('chartData', chartData);
 const initialSceneName = chartContainer.getAttribute('data-chart-initial-scene');
 
 // grab all the 'set-scene' markers
@@ -55,7 +54,6 @@ const setChartScene = (newSceneName) => {
 
   // change of scene!
   // console.log('TODO change scene from', currentSceneName, '==>', newSceneName);
-  console.log('SCENE:', newSceneName);
   const scene = chartData.scenes.find(({ name }) => name === newSceneName);
 
   const sceneWithProjection = {

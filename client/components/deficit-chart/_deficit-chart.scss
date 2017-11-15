@@ -1,19 +1,16 @@
-$chart-outer-height: 280px;
-$chart-outer-width: 100vw;
+$chart-height: 280px;
 
 .deficit-chart {
-  height: $chart-outer-height;
+  height: $chart-height;
   width: 100%;
-  // width: $chart-outer-width;
   margin: 0 auto 30px;
   position: relative;
   pointer-events: none;
 
   &__figure {
     display: block;
-    height: $chart-outer-height;
+    height: $chart-height;
     width: 100%;
-    // width: $chart-outer-width;
     padding: 10px;
     margin: 0;
     transition: background, box-shadow 0.1s linear;
@@ -22,24 +19,15 @@ $chart-outer-width: 100vw;
     &--stuck {
       position: fixed;
       top: 0;
+      left: 0;
       box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
       background: white;
     }
 
     &--at-bottom {
       position: absolute;
+      left: 0;
       background: #fff1e5;
     }
   }
 }
-
-// @include oGridRespondTo(S) {
-//   .deficit-chart {
-//     left: 0;
-//     width: 430px;
-//
-//     &__figure {
-//       width: 430px;
-//     }
-//   }
-// }
