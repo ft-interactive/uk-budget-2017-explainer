@@ -2,18 +2,24 @@
 {% extends "layout.html" %}
 
 {% block article_body %}
-<div class="o-typography-wrapper">
-{% markdown %}
 
+<div class="explainer">
+
+<div class="explainer__intro o-typography-wrapper">
+{% markdown %}
 Philip Hammond will present his second Budget as chancellor on November 22. Theresa May, the UK’s embattled prime minister, is looking to him to help deliver on the Conservative party’s pledge in this year’s general election to create “a strong economy that works for everyone”.
 
 But events have conspired against the chancellor, leaving him with limited scope for any significant giveaways.
+{% endmarkdown %}
+</div>
 
 <div class="deficit-chart" data-chart-data="{{ chartData | dump }}" data-chart-initial-scene="initial-projections">
   <figure class="deficit-chart__figure">
   </figure>
 </div>
 
+<div class="explainer__main o-typography-wrapper">
+{% markdown %}
 In his last budget, published in March, Mr Hammond set out a plan to reduce public borrowing from £58.3bn this year to £16.8bn by 2021-22.
 
 This gave Mr Hammond <span data-chart-set-scene="with-cap"></span>£25.8bn of headroom against his self-imposed fiscal target of reducing structural borrowing to no more than 2 per cent of national income (or £Xbn) by 2020-21. He said he needed this room for manoeuvre to allow him to accommodate any adverse shocks as the UK leaves the EU.
@@ -57,17 +63,19 @@ TKTK - Could refer to the other policies that Hammond is under pressure to deliv
 {% endmarkdown %}
 </div>
 
+
+<div class="explainer__outro">
 {% if flags.shareButtons %}
   {% include "includes/share.html" %}
 {% endif %}
-
 <div style="height:40px"></div>
-
 {# START MID AD SLOT
     You can move this wherever it works best in your page's design.
     For more control over the size, write your own o-ads div - see
     https://financial-times.github.io/o-ads/docs/developer-guide/display #}
 {% if flags.ads %}{{ macros.middleAd() }}{% endif %}
 {# END MID AD SLOT #}
+</div>
 
+</div>
 {% endblock %}
