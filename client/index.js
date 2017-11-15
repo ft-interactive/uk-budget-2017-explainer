@@ -85,7 +85,8 @@ const updateDisplay = () => {
 
       if (chartContainerBB.height - unstickMarkerBB.top > 0) {
         setAtBottomUnstuck(
-          unstickMarker.offsetTop - chartContainer.offsetTop - chartContainerBB.height,
+          // eslint-disable-next-line no-mixed-operators
+          unstickMarkerBB.top + scrollY - (chartContainer.offsetTop + chartContainerBB.height),
         );
       } else {
         setStuck();
