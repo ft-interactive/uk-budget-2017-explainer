@@ -12,10 +12,32 @@
     box-sizing: inherit;
   }
 
-  &__intro,
-  &__main,
-  &__outro {
-    margin: 0 auto;
-    max-width: 675px;
-  }
+  // &__intro,
+  // &__main,
+  // &__outro {
+  //   margin: 0 auto;
+  //   max-width: 675px;
+  //   padding: 0 10px;
+  // }
+}
+
+@include oGridRespondTo(S) {
+  // .explainer {
+  //   &__intro,
+  //   &__main,
+  //   &__outro {
+  //     padding: 0 30px;
+  //   }
+  // }
+}
+
+@include oGridRespondTo(M) {
+  // .explainer {
+  //   &__intro,
+  //   &__main,
+  //   &__outro {
+  //     padding: 0;
+  //     max-width: 520px;
+  //   }
+  // }
 }

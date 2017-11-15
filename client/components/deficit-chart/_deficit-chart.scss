@@ -17,6 +17,7 @@ $chart-outer-width: 100vw;
     padding: 10px;
     margin: 0;
     transition: background, box-shadow 0.1s linear;
+    z-index: 2;
 
     &--stuck {
       position: fixed;
