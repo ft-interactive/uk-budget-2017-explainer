@@ -1,10 +1,30 @@
 import './styles.scss';
-import chartData from './chart-data.yml';
 
-console.log(chartData);
+const stringToColour = (str) => {
+  let hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  let colour = '#';
+  for (var i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += `00${value.toString(16)}`.substr(-2);
+  }
+  return colour;
+};
 
 const chartContainer = document.querySelector('.deficit-chart');
 const chart = chartContainer.querySelector('.deficit-chart__figure');
+
+const chartData = JSON.parse(chartContainer.getAttribute('data-chart-data'));
+console.log('chartData', chartData);
+const initialSceneName = chartContainer.getAttribute('data-chart-initial-scene');
+
+// grab all the 'set-scene' markers
+const sceneChanges = [...document.querySelectorAll('[data-chart-set-scene]')].map(el => ({
+  el,
+  name: el.getAttribute('data-chart-set-scene'),
+}));
 
 const unstickMarker = document.querySelector('[data-marker=unstick]');
 
@@ -24,6 +44,35 @@ const setAtBottomUnstuck = (offset) => {
   chart.classList.add('deficit-chart__figure--at-bottom');
   chart.classList.remove('deficit-chart__figure--stuck');
   chart.style.top = `${offset}px`;
+};
+
+/**
+ * The function that updates the chart
+ */
+let currentSceneName = null;
+const setChartScene = (newSceneName) => {
+  if (newSceneName === currentSceneName) return;
+
+  // change of scene!
+  // console.log('TODO change scene from', currentSceneName, '==>', newSceneName);
+  console.log('SCENE:', newSceneName);
+  const scene = chartData.scenes.find(({ name }) => name === newSceneName);
+
+  const sceneWithProjection = {
+    ...scene,
+    projection: chartData.projections.find(({ id }) => id === scene.projection),
+  };
+
+  chart.innerHTML = `<pre style-"overflow:hidden">${JSON.stringify(
+    sceneWithProjection,
+    null,
+    2,
+  )}</pre>`;
+
+  chart.style.background = stringToColour(newSceneName);
+
+  // note for next time
+  currentSceneName = newSceneName;
 };
 
 const updateDisplay = () => {
@@ -48,6 +97,23 @@ const updateDisplay = () => {
       setAtTopUnstuck();
     }
   }
+
+  // update the scene as appropriate
+  {
+    // find the bottom-most scene marker that's actually within the viewport (just a bit higher than the bottom)
+    const withinViewport = sceneChanges
+      .map(({ el, name }) => {
+        if (el.getBoundingClientRect().bottom < innerHeight - 20) {
+          return name;
+        }
+        return null;
+      })
+      .filter(x => x);
+
+    const targetSceneName = withinViewport.length ? withinViewport.pop() : initialSceneName;
+
+    setChartScene(targetSceneName);
+  }
 };
 
 // update the display once at the start
@@ -55,4 +121,14 @@ updateDisplay();
 
 // ...and again on every scroll and resize
 window.addEventListener('scroll', updateDisplay);
-window.addEventListener('scroll', updateDisplay);
+window.addEventListener('resize', updateDisplay);
+
+// HACK update display every quarter-second for the first few seconds, then every couple of seconds
+// forever after, to fix any weirdness caused by ads or other stuff resizing themselves
+{
+  const initialUpdatesInterval = setInterval(updateDisplay, 250);
+  setTimeout(() => {
+    clearInterval(initialUpdatesInterval);
+    setInterval(updateDisplay, 2000);
+  }, 3000);
+}

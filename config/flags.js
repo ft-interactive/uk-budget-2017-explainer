@@ -1,10 +1,11 @@
-export default (environment = 'development') => ({ // eslint-disable-line
+export default (environment = 'development') => ({
+  // eslint-disable-line
   prod: environment === 'production',
   errorReporting: environment === 'production',
   analytics: environment === 'production',
   googleAnalytics: environment === 'production',
-  ads: true,
-  onwardjourney: true,
+  ads: false,
+  onwardjourney: false,
   shareButtons: true,
   header: true,
   footer: true,

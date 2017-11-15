@@ -1,8 +1,23 @@
+import * as berthaClient from 'bertha-client';
 import article from './article';
 import getFlags from './flags';
 import getOnwardJourney from './onward-journey';
 
 export default async (environment = 'development') => {
+  const chartData = await berthaClient.get('1iF8PSIBhTGhCs3JQ7I0jQxkd8vXL7On3aV1kr5SXA7g', [
+    'scenes',
+    'projections',
+    'options|object',
+  ]);
+
+  // console.log(
+  //   berthaClient.createURL('1iF8PSIBhTGhCs3JQ7I0jQxkd8vXL7On3aV1kr5SXA7g', [
+  //     'scenes',
+  //     'projections',
+  //     'options|object',
+  //   ]),
+  // );
+
   const d = await article(environment);
   const flags = await getFlags(environment);
   const onwardJourney = await getOnwardJourney(environment);
@@ -32,5 +47,6 @@ export default async (environment = 'development') => {
     ...d,
     flags,
     onwardJourney,
+    chartData,
   };
 };
