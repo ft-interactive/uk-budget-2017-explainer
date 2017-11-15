@@ -1,7 +1,6 @@
 @import 'o-colors/main';
 @import 'o-grid/main';
 @import './components/core/main';
-@import './components/deficit-chart/deficit-chart';
 
 .explainer {
   box-sizing: border-box;
@@ -11,33 +10,41 @@
   *:after {
     box-sizing: inherit;
   }
-
-  // &__intro,
-  // &__main,
-  // &__outro {
-  //   margin: 0 auto;
-  //   max-width: 675px;
-  //   padding: 0 10px;
-  // }
 }
 
-@include oGridRespondTo(S) {
-  // .explainer {
-  //   &__intro,
-  //   &__main,
-  //   &__outro {
-  //     padding: 0 30px;
-  //   }
-  // }
+$chart-height: 280px;
+
+.deficit-chart {
+  height: $chart-height;
+  width: 100%;
+  margin: 0 auto 30px;
+  position: relative;
+  pointer-events: none;
+
+  &__figure {
+    display: block;
+    height: $chart-height;
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    transition: background, box-shadow 0.1s linear;
+    z-index: 2;
+
+    &--stuck {
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+      background: white;
+    }
+
+    &--at-bottom {
+      position: absolute;
+      left: 0;
+      background: #fff1e5;
+    }
+  }
 }
 
 @include oGridRespondTo(M) {
-  // .explainer {
-  //   &__intro,
-  //   &__main,
-  //   &__outro {
-  //     padding: 0;
-  //     max-width: 520px;
-  //   }
-  // }
 }
