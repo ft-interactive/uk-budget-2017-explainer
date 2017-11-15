@@ -1,20 +1,33 @@
-$chart-outer-height: 300px;
-$chart-outer-width: 300px;
+$chart-outer-height: 360px;
+$chart-outer-width: 100vw;
+
+// .article-body-column {
+//   margin: 0 -10px;
+//   width: 100%;
+//
+//   @include oGridRespondTo(S) {
+//     margin: 0 -30px;
+//   }
+// }
 
 .deficit-chart {
   height: $chart-outer-height;
   width: $chart-outer-width;
   margin: 0 auto;
   margin-bottom: 30px;
+  position: relative;
+  left: -10px;
 
   &__figure {
     // outline: 1px solid red;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
     background: white;
     height: $chart-outer-height;
     width: $chart-outer-width;
     margin: 0;
-    background: url(http://ft-ig-images-prod.s3-website-eu-west-1.amazonaws.com/v1/8489325275-fnxw6.png);
-    background-size: cover;
+    // background: url(http://ft-ig-images-prod.s3-website-eu-west-1.amazonaws.com/v1/8489325275-fnxw6.png);
+    // background-size: cover;
+    background: red;
 
     &--stuck {
       position: fixed;
@@ -22,7 +35,18 @@ $chart-outer-width: 300px;
     }
 
     &--at-bottom {
-      position: fixed;
+      position: absolute;
+    }
+  }
+}
+
+@include oGridRespondTo(S) {
+  .deficit-chart {
+    left: 0;
+    width: 430px;
+
+    &__figure {
+      width: 430px;
     }
   }
 }

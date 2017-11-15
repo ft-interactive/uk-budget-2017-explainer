@@ -34,7 +34,9 @@ const updateDisplay = () => {
       const unstickMarkerBB = unstickMarker.getBoundingClientRect();
 
       if (chartContainerBB.height - unstickMarkerBB.top > 0) {
-        setAtBottomUnstuck(unstickMarkerBB.top - chartContainerBB.height);
+        setAtBottomUnstuck(
+          unstickMarker.offsetTop - chartContainer.offsetTop - chartContainerBB.height,
+        );
       } else {
         setStuck();
       }
