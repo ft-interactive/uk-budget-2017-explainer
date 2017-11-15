@@ -1,4 +1,7 @@
 import './styles.scss';
+import chartData from './chart-data.yml';
+
+console.log(chartData);
 
 const chartContainer = document.querySelector('.deficit-chart');
 const chart = chartContainer.querySelector('.deficit-chart__figure');
