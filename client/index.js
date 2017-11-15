@@ -1,17 +1,17 @@
 import './styles.scss';
 
-const stringToColour = (str) => {
-  let hash = 0;
-  for (var i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  let colour = '#';
-  for (var i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    colour += `00${value.toString(16)}`.substr(-2);
-  }
-  return colour;
-};
+// const stringToColour = (str) => {
+//   let hash = 0;
+//   for (var i = 0; i < str.length; i++) {
+//     hash = str.charCodeAt(i) + ((hash << 5) - hash);
+//   }
+//   let colour = '#';
+//   for (var i = 0; i < 3; i++) {
+//     const value = (hash >> (i * 8)) & 0xff;
+//     colour += `00${value.toString(16)}`.substr(-2);
+//   }
+//   return colour;
+// };
 
 const chartContainer = document.querySelector('.deficit-chart');
 const chart = chartContainer.querySelector('.deficit-chart__figure');
@@ -69,17 +69,17 @@ const setChartScene = (newSceneName) => {
     2,
   )}</pre>`;
 
-  chart.style.background = stringToColour(newSceneName);
+  // chart.style.background = stringToColour(newSceneName);
 
   // note for next time
   currentSceneName = newSceneName;
 };
 
 const updateDisplay = () => {
+  const chartContainerBB = chartContainer.getBoundingClientRect();
+
   // stick or unstick the chart as appropriate
   {
-    const chartContainerBB = chartContainer.getBoundingClientRect();
-
     if (chartContainerBB.top < 0) {
       // we're under the point where the chart first sticks.
       // check we're not somewhere after the unstick marker...
@@ -100,10 +100,11 @@ const updateDisplay = () => {
 
   // update the scene as appropriate
   {
-    // find the bottom-most scene marker that's actually within the viewport (just a bit higher than the bottom)
+    // find the bottom-most scene marker that's comfortably within view
+    const tripwire = innerHeight - (chartContainerBB.height - 60);
     const withinViewport = sceneChanges
       .map(({ el, name }) => {
-        if (el.getBoundingClientRect().bottom < innerHeight - 20) {
+        if (el.getBoundingClientRect().bottom < tripwire) {
           return name;
         }
         return null;

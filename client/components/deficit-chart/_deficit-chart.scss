@@ -1,4 +1,4 @@
-$chart-outer-height: 360px;
+$chart-outer-height: 280px;
 $chart-outer-width: 100vw;
 
 // .article-body-column {
@@ -28,24 +28,25 @@ $chart-outer-width: 100vw;
   pointer-events: none;
 
   &__figure {
-    // outline: 1px solid red;
-    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-    background: white;
     height: $chart-outer-height;
     width: $chart-outer-width;
     padding: 10px;
     margin: 0;
     // background: url(http://ft-ig-images-prod.s3-website-eu-west-1.amazonaws.com/v1/8489325275-fnxw6.png);
     // background-size: cover;
-    background: red;
+    transition: background, box-shadow 0.1s linear;
 
     &--stuck {
       position: fixed;
       top: 0;
+      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+      background: white;
     }
 
     &--at-bottom {
       position: absolute;
+      // box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+      background: #fff1e5;
     }
   }
 }
