@@ -47,4 +47,32 @@ $chart-height: 280px;
 }
 
 @include oGridRespondTo(M) {
+  .explainer {
+    &__main-body {
+      margin-top: 40px;
+    }
+
+    h5 {
+      margin-top: 100px;
+    }
+  }
+
+  .deficit-chart {
+    position: absolute;
+    right: 0;
+    margin-top: 40px;
+    width: 50%;
+    outline: 1px solid blue;
+    height: 100vh;
+
+    &__figure {
+      height: 100vh;
+      &--stuck {
+        left: auto;
+        width: 50%;
+        box-shadow: none;
+        background: pink;
+      }
+    }
+  }
 }
