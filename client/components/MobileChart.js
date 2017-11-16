@@ -100,6 +100,7 @@ type MobileChartProps = {
   height: number, // including heading, margins
   width: number, // ditto
   projection: Projection,
+  barLabels: string[],
   // showCap: boolean,
 };
 
