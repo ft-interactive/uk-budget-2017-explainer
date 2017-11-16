@@ -19,11 +19,6 @@ chartEl.appendChild(reactRoot);
 const initialSceneName = chartContainerEl.getAttribute('data-chart-initial-scene');
 invariant(initialSceneName, 'Required data attribute');
 
-// ReactDOM.render(
-//   <ChartContainer sceneName={initialSceneName} mode={isMobileLayout() ? 'mobile' : 'desktop'} availableWidth={10} />,
-//   reactRoot,
-// );
-
 // grab all the 'set-scene' markers from the body text...
 const sceneChanges = [...document.querySelectorAll('[data-chart-set-scene]')].map(el => ({
   el,

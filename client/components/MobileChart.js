@@ -97,8 +97,8 @@ const Bars = ({ projection, labels, extent }: BarsProps) => (
 
 type MobileChartProps = {
   heading: string,
-  height: number, // including heading, margins
-  width: number, // ditto
+  height: number,
+  width: number,
   projection: Projection,
   barLabels: string[],
   // showCap: boolean,
