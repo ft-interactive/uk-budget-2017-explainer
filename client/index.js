@@ -144,8 +144,9 @@ const updateDisplay = () => {
     const idealOffsetFromViewport = Math.max(0, window.innerHeight - chartHeight) / 2;
 
     const startStickingAtScrollPoint = centralSectionTop - idealOffsetFromViewport;
+
     const endStickingAtScrollPoint =
-      centralSectionTop + centralSectionBB.height - startStickingAtScrollPoint;
+      centralSectionTop + (centralSectionBB.height - startStickingAtScrollPoint);
 
     if (window.scrollY >= startStickingAtScrollPoint) {
       if (window.scrollY >= endStickingAtScrollPoint) {
@@ -155,13 +156,18 @@ const updateDisplay = () => {
           setAtBottomUnstuck();
           stickyStatus = 'at-bottom';
         }
+
+        const chartTopForWhenStuckAtBottom = centralSectionBB.height - chartHeight;
+
+        chartEl.style.top = `${chartTopForWhenStuckAtBottom}px`;
       } else {
         console.log('middle');
         if (stickyStatus !== 'stuck') {
           setStuck();
           stickyStatus = 'stuck';
         }
-        setChartTop(idealOffsetFromViewport);
+
+        chartEl.style.top = `${idealOffsetFromViewport}px`;
       }
     } else {
       if (stickyStatus !== 'at-top') {
@@ -169,7 +175,7 @@ const updateDisplay = () => {
         stickyStatus = 'at-top';
       }
 
-      // setChartTop();
+      chartEl.style.top = '';
 
       console.log('top');
     }
