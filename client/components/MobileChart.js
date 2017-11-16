@@ -37,10 +37,11 @@ const Ticks = ({ tickSize, extent }: TicksProps) => (
       .tick:not(:first-child):after {
         content: '';
         display: block;
-        height: 100%;
+        height: 10px;
         width: 1px;
         position: absolute;
         background: gray;
+        bottom: -14px;
       }
 
       .label {
@@ -49,7 +50,7 @@ const Ticks = ({ tickSize, extent }: TicksProps) => (
         margin-left: -20px;
         text-align: center;
         position: absolute;
-        bottom: -16px;
+        bottom: -30px;
       }
     `}</style>
   </div>

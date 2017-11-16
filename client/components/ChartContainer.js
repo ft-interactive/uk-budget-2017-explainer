@@ -42,7 +42,7 @@ export default class ChartContainer extends Component<Props> {
         );
       case 'desktop':
         return (
-          <DesktopChart width={availableWidth} height={availableWidth} heading={scene.heading} />
+          <DesktopChart width={availableWidth} height={availableHeight} heading={scene.heading} />
         );
       default:
         throw new Error(`Unknown mode: ${mode}`);

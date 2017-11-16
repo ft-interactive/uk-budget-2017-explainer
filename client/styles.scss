@@ -19,7 +19,7 @@ $chart-height: 280px;
   width: 100%;
   margin: 0 auto 30px;
   position: relative;
-  pointer-events: none;
+  cursor: default;
 
   &__figure {
     display: block;
@@ -29,7 +29,6 @@ $chart-height: 280px;
     margin: 0;
     transition: background, box-shadow 0.1s linear;
     z-index: 2;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,9 +50,19 @@ $chart-height: 280px;
 }
 
 @include oGridRespondTo(M) {
+  $chart-height: 300px; // this is the single source of truth; affects sticky logic and chart drawing.
+
   .explainer {
-    &__main-body {
+    &__central-section {
+      outline: 1px solid blue;
       margin-top: 40px;
+      position: relative;
+    }
+
+    &__main-body {
+      width: 50%;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     h5 {
@@ -64,13 +73,16 @@ $chart-height: 280px;
   .deficit-chart {
     position: absolute;
     right: 0;
-    margin-top: 40px;
+    margin-top: 0;
+    top: 0;
     width: 50%;
-    height: 100vh;
+    height: $chart-height;
+    outline: 1px solid pink;
 
     &__figure {
-      height: 100vh;
-      align-items: flex-start;
+      height: $chart-height;
+      overflow: hidden;
+      outline: 1px solid purple;
 
       &--stuck {
         left: auto;

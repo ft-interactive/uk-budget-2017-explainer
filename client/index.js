@@ -40,9 +40,12 @@ const setAtTopUnstuck = () => {
   chartEl.style.top = '';
 };
 
-const setAtBottomUnstuck = (offset) => {
+const setAtBottomUnstuck = () => {
   chartEl.classList.add('deficit-chart__figure--at-bottom');
   chartEl.classList.remove('deficit-chart__figure--stuck');
+};
+
+const setBottomUnstuckOffset = (offset) => {
   chartEl.style.top = `${offset}px`;
 };
 
@@ -67,31 +70,39 @@ const setAtBottomUnstuck = (offset) => {
 // };
 
 const updateDisplay = () => {
-  // let stickyStatus; // 0 is top, 1 is middle, 2 is bottom
+  let stickyStatus;
+  const isMobile = window.innerWidth < 740;
 
   const chartContainerBB = chartContainerEl.getBoundingClientRect();
 
   // stick or unstick the chart as appropriate
   {
-    if (chartContainerBB.top < 0) {
+    if (chartContainerBB.top <= 0) {
       // we're under the point where the chart first sticks.
       // check we're not somewhere after the unstick marker...
       const unstickMarkerBB = unstickMarker.getBoundingClientRect();
 
       if (chartContainerBB.height - unstickMarkerBB.top > 0) {
-        setAtBottomUnstuck(
-          // eslint-disable-next-line no-mixed-operators
-          unstickMarkerBB.top + scrollY - (chartContainerEl.offsetTop + chartContainerBB.height),
+        if (stickyStatus !== 'at-bottom') {
+          stickyStatus = 'at-bottom';
+          setAtBottomUnstuck();
+        }
+
+        /* eslint-disable no-mixed-operators */
+        setBottomUnstuckOffset(
+          unstickMarkerBB.top +
+            window.scrollY -
+            (chartContainerEl.offsetTop + chartContainerBB.height),
         );
-        // stickyStatus = 2;
-      } else {
+        /* eslint-enable no-mixed-operators */
+      } else if (stickyStatus !== 'stuck') {
+        stickyStatus = 'stuck';
         setStuck();
-        // stickyStatus = 1;
       }
-    } else {
+    } else if (stickyStatus !== 'at-top') {
       // we're somewhere near the top of the page; chart shouldn't be stuck here
+      stickyStatus = 'at-top';
       setAtTopUnstuck();
-      // stickyStatus = 0;
     }
   }
 
@@ -118,9 +129,10 @@ const updateDisplay = () => {
   ReactDOM.render(
     <ChartContainer
       sceneName={targetSceneName}
-      mode={window.innerWidth < 740 ? 'mobile' : 'desktop'}
-      availableWidth={chartContainerBB.width} // TODO
-      availableHeight={chartContainerBB.height} // TODO
+      mode={isMobile ? 'mobile' : 'desktop'}
+      availableWidth={chartContainerBB.width}
+      availableHeight={chartContainerBB.height}
+      stickyStatus={stickyStatus} // TODO use this for styling, or remove it
     />,
     reactRoot,
   );

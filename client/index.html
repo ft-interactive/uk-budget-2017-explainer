@@ -13,12 +13,17 @@ But events have conspired against the chancellor, leaving him with limited scope
 {% endmarkdown %}
 </div></div></div>
 
-<div class="deficit-chart" data-chart-data="{{ chartData | dump }}" data-chart-initial-scene="initial-projections">
-  <figure class="deficit-chart__figure">
-  </figure>
-</div>
 
-<div class="explainer__main-body o-grid-container o-typography-wrapper"><div class="o-grid-row"><div data-o-grid-colspan="12 Mcenter Muncenter M6">
+<div class="explainer__central-section">
+  <div class="deficit-chart" data-chart-data="{{ chartData | dump }}" data-chart-initial-scene="initial-projections">
+    <figure class="deficit-chart__figure">
+    </figure>
+  </div>
+
+  <div class="explainer__main-body o-grid-container">
+    <div class="o-grid-row">
+      <div class="o-typography-wrapper" data-o-grid-colspan="12">
+
 {% markdown %}
 In his last budget, published in March, Mr Hammond set out a plan to reduce public borrowing from £58.3bn this year to £16.8bn by 2021-22.
 
@@ -54,7 +59,12 @@ The OBR have not yet said exactly how much they will change their forecast. The 
 
 That would mean that, in the space of eight months, Mr Hammond has <span data-chart-set-scene="squeezed-headroom">lost half of his headroom</span> against his fiscal target, even before any potential Brexit-related shocks have hit the economy.
 {% endmarkdown %}
-</div></div></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div style="margin-bottom: 40px" data-marker="unstick"></div>
 
