@@ -1,34 +1,48 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
+// @flow
+
+import React from 'react';
+import invariant from 'invariant';
+import ReactDOM from 'react-dom';
 import './styles.scss';
-// import DeficitChart from './components/DeficitChart';
+import ChartContainer from './components/ChartContainer';
 
 const chartContainerEl = document.querySelector('.deficit-chart');
+invariant(chartContainerEl, 'Element must exist');
 const chartEl = chartContainerEl.querySelector('.deficit-chart__figure');
+invariant(chartEl, 'Element must exist');
 
-// const deficitChart = ReactDOM.render(<DeficitChart />, chartContainerEl);
+// make a new empty div to use as a React root
+const reactRoot = document.createElement('div');
+chartEl.innerHTML = '';
+chartEl.appendChild(reactRoot);
 
-const chartData = JSON.parse(chartContainerEl.getAttribute('data-chart-data'));
 const initialSceneName = chartContainerEl.getAttribute('data-chart-initial-scene');
+invariant(initialSceneName, 'Required data attribute');
 
-// grab all the 'set-scene' markers
+// ReactDOM.render(
+//   <ChartContainer sceneName={initialSceneName} mode={isMobileLayout() ? 'mobile' : 'desktop'} availableWidth={10} />,
+//   reactRoot,
+// );
+
+// grab all the 'set-scene' markers from the body text...
 const sceneChanges = [...document.querySelectorAll('[data-chart-set-scene]')].map(el => ({
   el,
   name: el.getAttribute('data-chart-set-scene'),
 }));
 
 const unstickMarker = document.querySelector('[data-marker=unstick]');
+invariant(unstickMarker, 'must exist');
 
 const setStuck = () => {
   chartEl.classList.add('deficit-chart__figure--stuck');
   chartEl.classList.remove('deficit-chart__figure--at-bottom');
-  chartEl.style.top = null;
+  chartEl.style.top = '';
 };
 
 const setAtTopUnstuck = () => {
   chartEl.classList.remove('deficit-chart__figure--stuck');
   chartEl.classList.remove('deficit-chart__figure--at-bottom');
-  chartEl.style.top = null;
+  chartEl.style.top = '';
 };
 
 const setAtBottomUnstuck = (offset) => {
@@ -40,36 +54,25 @@ const setAtBottomUnstuck = (offset) => {
 /**
  * The function that updates the chart
  */
-let currentSceneName = null;
-const setChartScene = (newSceneName) => {
-  if (newSceneName === currentSceneName) return;
-
-  // change of scene!
-  // console.log('TODO change scene from', currentSceneName, '==>', newSceneName);
-  const scene = chartData.scenes.find(({ name }) => name === newSceneName);
-
-  const sceneWithProjection = {
-    ...scene,
-    projection: chartData.projections.find(({ id }) => id === scene.projection),
-  };
-
-  chartEl.innerHTML = `<pre style-"overflow:hidden">${JSON.stringify(
-    sceneWithProjection,
-    null,
-    2,
-  )}</pre>`;
-
-  // deficitChart.setState(scene);
-
-  // chart.style.background = stringToColour(newSceneName);
-
-  // note for next time
-  currentSceneName = newSceneName;
-};
+// let currentSceneName = null;
+// const setChartScene = (newSceneName) => {
+//   if (newSceneName === currentSceneName) return;
+//
+//   //
+//   // chartEl.innerHTML = `<pre style-"overflow:hidden">${JSON.stringify(
+//   //   sceneWithProjection,
+//   //   null,
+//   //   2,
+//   // )}</pre>`;
+//
+//   // chart.style.background = stringToColour(newSceneName);
+//
+//   // note for next time
+//   currentSceneName = newSceneName;
+// };
 
 const updateDisplay = () => {
-  const isMobileLayout = innerWidth < 765;
-  let stickyStatus; // 0 is top, 1 is middle, 2 is bottom
+  // let stickyStatus; // 0 is top, 1 is middle, 2 is bottom
 
   const chartContainerBB = chartContainerEl.getBoundingClientRect();
 
@@ -85,22 +88,22 @@ const updateDisplay = () => {
           // eslint-disable-next-line no-mixed-operators
           unstickMarkerBB.top + scrollY - (chartContainerEl.offsetTop + chartContainerBB.height),
         );
-        stickyStatus = 2;
+        // stickyStatus = 2;
       } else {
         setStuck();
-        stickyStatus = 1;
+        // stickyStatus = 1;
       }
     } else {
       // we're somewhere near the top of the page; chart shouldn't be stuck here
       setAtTopUnstuck();
-      stickyStatus = 0;
+      // stickyStatus = 0;
     }
   }
 
   // update the scene as appropriate
-  {
+  const targetSceneName: string = (() => {
     // find the bottom-most scene marker that's comfortably within view
-    const tripwire = innerHeight - (chartContainerBB.height - 60);
+    const tripwire = window.innerHeight - (chartContainerBB.height - 60);
     const withinViewport = sceneChanges
       .map(({ el, name }) => {
         if (el.getBoundingClientRect().bottom < tripwire) {
@@ -110,10 +113,22 @@ const updateDisplay = () => {
       })
       .filter(x => x);
 
-    const targetSceneName = withinViewport.length ? withinViewport.pop() : initialSceneName;
+    invariant(withinViewport.every(x => typeof x === 'string'), 'must be all strings here');
 
-    setChartScene(targetSceneName);
-  }
+    const returnValue = withinViewport.length ? withinViewport.pop() : initialSceneName;
+    invariant(typeof returnValue === 'string', 'must be a string');
+    return returnValue;
+  })();
+
+  ReactDOM.render(
+    <ChartContainer
+      sceneName={targetSceneName}
+      mode={window.innerWidth < 765 ? 'mobile' : 'desktop'}
+      availableWidth={chartContainerBB.width} // TODO
+      availableHeight={chartContainerBB.height} // TODO
+    />,
+    reactRoot,
+  );
 };
 
 // update the display once at the start
