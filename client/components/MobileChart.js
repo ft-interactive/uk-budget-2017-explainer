@@ -120,7 +120,7 @@ const MobileChart = ({ heading, height, width, projection, barLabels }: MobileCh
         width: ${width}px;
         height: ${height}px;
         position: relative;
-        padding: 10px 10px 40px 10px;
+        padding: 10px 30px 40px 10px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -135,6 +135,13 @@ const MobileChart = ({ heading, height, width, projection, barLabels }: MobileCh
       .chart-area {
         position: relative;
         flex: 1;
+      }
+
+      @media (min-width: 490px) {
+        .mobile-chart {
+          padding-left: 40px;
+          padding-right: 40px;
+        }
       }
     `}</style>
   </div>
