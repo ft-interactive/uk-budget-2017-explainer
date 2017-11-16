@@ -31,7 +31,6 @@ invariant(unstickMarker, 'must exist');
 const setStuck = () => {
   chartEl.classList.add('deficit-chart__figure--stuck');
   chartEl.classList.remove('deficit-chart__figure--at-bottom');
-  chartEl.style.top = '';
 };
 
 const setAtTopUnstuck = () => {
@@ -45,7 +44,8 @@ const setAtBottomUnstuck = () => {
   chartEl.classList.remove('deficit-chart__figure--stuck');
 };
 
-const setBottomUnstuckOffset = (offset) => {
+const setChartTop = (offset: number) => {
+  // console.log('setting top', offset);
   chartEl.style.top = `${offset}px`;
 };
 
@@ -77,27 +77,53 @@ const updateDisplay = () => {
 
   // stick or unstick the chart as appropriate
   {
-    if (chartContainerBB.top <= 0) {
+    const startStickingAt = isMobile ? 0 : 200;
+
+    if (chartContainerBB.top <= startStickingAt) {
       // we're under the point where the chart first sticks.
       // check we're not somewhere after the unstick marker...
       const unstickMarkerBB = unstickMarker.getBoundingClientRect();
 
-      if (chartContainerBB.height - unstickMarkerBB.top > 0) {
+      if (chartContainerBB.height - unstickMarkerBB.top > 0 - startStickingAt) {
         if (stickyStatus !== 'at-bottom') {
           stickyStatus = 'at-bottom';
           setAtBottomUnstuck();
         }
 
         /* eslint-disable no-mixed-operators */
-        setBottomUnstuckOffset(
-          unstickMarkerBB.top +
-            window.scrollY -
-            (chartContainerEl.offsetTop + chartContainerBB.height),
-        );
+        if (isMobile) {
+          // keeping this separate because I know it works
+          setChartTop(
+            unstickMarkerBB.top +
+              window.scrollY -
+              (chartContainerEl.offsetTop + chartContainerBB.height),
+          );
+        } else {
+          const newViewportOffset =
+            unstickMarkerBB.top - (chartContainerBB.height + chartContainerEl.offsetTop);
+
+          const newTop = window.scrollY - window.innerHeight + newViewportOffset;
+
+          // const newTop =
+          //   unstickMarkerBB.top +
+          //   window.scrollY -
+          //   (chartContainerEl.offsetTop + chartContainerBB.height) -
+          //   window.innerHeight;
+          // console.log(newTop);
+
+          setChartTop(newTop);
+        }
         /* eslint-enable no-mixed-operators */
-      } else if (stickyStatus !== 'stuck') {
-        stickyStatus = 'stuck';
-        setStuck();
+      } else {
+        // if (!isMobile) {
+        // }
+        setChartTop(startStickingAt);
+
+        if (stickyStatus !== 'stuck') {
+          stickyStatus = 'stuck';
+          // if (isMobile) setChartTop(0);
+          setStuck();
+        }
       }
     } else if (stickyStatus !== 'at-top') {
       // we're somewhere near the top of the page; chart shouldn't be stuck here

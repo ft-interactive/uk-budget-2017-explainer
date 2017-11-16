@@ -27,7 +27,7 @@ $chart-height: 280px;
     width: 100%;
     padding: 10px;
     margin: 0;
-    transition: background, box-shadow 0.1s linear;
+    // transition: background-color, box-shadow 0.25s, 0.25s linear, linear;
     z-index: 2;
     display: flex;
     align-items: center;
@@ -88,6 +88,12 @@ $chart-height: 280px;
         left: auto;
         width: 50%;
         box-shadow: none;
+        background: transparent;
+      }
+
+      &--at-bottom {
+        // position: absolute;
+        // left: 0;
         background: transparent;
       }
     }
