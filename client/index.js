@@ -123,7 +123,7 @@ const updateDisplay = () => {
   ReactDOM.render(
     <ChartContainer
       sceneName={targetSceneName}
-      mode={window.innerWidth < 765 ? 'mobile' : 'desktop'}
+      mode={window.innerWidth < 740 ? 'mobile' : 'desktop'}
       availableWidth={chartContainerBB.width} // TODO
       availableHeight={chartContainerBB.height} // TODO
     />,
