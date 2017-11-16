@@ -87,6 +87,8 @@ export default class App extends Component<AppProps, State> {
 
     const chartHeight = mode === 'desktop' ? 400 : 280;
 
+    const chartWidth = mode === 'desktop' ? measurements.appWidth / 2 : measurements.appWidth;
+
     const fixedChartYOffsetFromViewport =
       mode === 'desktop' ? (measurements.viewportHeight - chartHeight) / 2 : 0;
 
@@ -104,6 +106,7 @@ export default class App extends Component<AppProps, State> {
       stickinessEnd,
       chartHeight,
       fixedChartYOffsetFromViewport,
+      chartWidth,
     });
   }
 
@@ -131,6 +134,7 @@ export default class App extends Component<AppProps, State> {
       scrollY,
       mode,
       chartHeight,
+      chartWidth,
       stickinessStart,
       stickinessEnd,
       fixedChartYOffsetFromViewport,
@@ -160,7 +164,17 @@ export default class App extends Component<AppProps, State> {
               which === 'bottom' && 'chart--at-bottom',
             )}
           >
-            {which}
+            <pre style={{ margin: '0' }}>{`
+              asdf
+
+              asdfasdf
+
+              asdfasdf
+
+              asdfadsf
+
+              asdfasdf
+              `}</pre>
           </div>
         </div>
 
@@ -170,8 +184,8 @@ export default class App extends Component<AppProps, State> {
 
         <style jsx>{`
           .app {
+            // padding-top: 10px;
             outline: 1px solid blue;
-            // padding: 10px 0;
             box-sizing: border-box;
             position: relative;
             max-width: 1200px;
@@ -185,21 +199,17 @@ export default class App extends Component<AppProps, State> {
           }
 
           .chart-container {
-            background: pink;
-            opacity: 0.5;
             height: ${chartHeight}px;
           }
 
           .chart {
             height: ${chartHeight}px;
-            outline: 1px solid purple;
-            width: ${measurements.appWidth / 2}px;
+            width: ${chartWidth}px;
           }
 
           .chart--stuck {
             position: fixed;
             top: ${fixedChartYOffsetFromViewport}px;
-            outline: 1px solid green;
           }
 
           .chart--at-bottom {
@@ -207,8 +217,17 @@ export default class App extends Component<AppProps, State> {
             bottom: 0;
           }
 
+          .app--mobile .chart {
+            background: #fff1e5;
+            transition: background-color 0.5s linear, box-shadow 0.25s linear;
+          }
+          .app--mobile .chart--stuck {
+            background: white;
+            box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+          }
+
           .copy-container {
-            padding: 0 10px;
+            padding: 20px 10px 0;
           }
 
           .app--desktop {
@@ -217,9 +236,7 @@ export default class App extends Component<AppProps, State> {
           }
 
           .app--desktop .copy-container {
-            outline: 1px solid green;
             width: 50%;
-            // width: calc(50% + 20px);
             padding: 0 20px;
           }
 
