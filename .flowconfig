@@ -14,4 +14,4 @@ suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 experimental.strict_call_arity=true
 experimental.const_params=true
 emoji=true
-module.name_mapper='.*\(.s?css\)' -> 'empty/object'
+module.name_mapper='.*\(.scss\)' -> 'empty/object'
