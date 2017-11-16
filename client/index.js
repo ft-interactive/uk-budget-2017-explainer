@@ -132,7 +132,11 @@ const updateDisplay = () => {
 };
 
 // update the display once at the start
-updateDisplay();
+try {
+  updateDisplay();
+} catch (error) {
+  console.error(error);
+}
 
 // ...and again on every scroll and resize
 window.addEventListener('scroll', updateDisplay);
