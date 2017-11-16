@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 import './styles.scss';
 import ChartContainer from './components/ChartContainer';
 
+const centralSectionEl = document.querySelector('.explainer__central-section');
+invariant(centralSectionEl, 'Element must exist');
 const chartContainerEl = document.querySelector('.deficit-chart');
 invariant(chartContainerEl, 'Element must exist');
 const chartEl = chartContainerEl.querySelector('.deficit-chart__figure');
@@ -69,14 +71,14 @@ const setChartTop = (offset: number) => {
 //   currentSceneName = newSceneName;
 // };
 
+let stickyStatus: 'at-top' | 'stuck' | 'at-bottom';
 const updateDisplay = () => {
-  let stickyStatus;
   const isMobile = window.innerWidth < 740;
 
   const chartContainerBB = chartContainerEl.getBoundingClientRect();
 
   // stick or unstick the chart as appropriate
-  {
+  if (isMobile) {
     const startStickingAt = isMobile ? 0 : 200;
 
     if (chartContainerBB.top <= startStickingAt) {
@@ -129,6 +131,47 @@ const updateDisplay = () => {
       // we're somewhere near the top of the page; chart shouldn't be stuck here
       stickyStatus = 'at-top';
       setAtTopUnstuck();
+    }
+  }
+
+  // NEW APPROACH
+  if (!isMobile) {
+    const centralSectionBB = centralSectionEl.getBoundingClientRect();
+    const centralSectionTop = centralSectionEl.offsetTop;
+    const chartHeight = chartContainerBB.height;
+
+    // work out ideal gap from top of viewport, if chart is to be vertically centered
+    const idealOffsetFromViewport = Math.max(0, window.innerHeight - chartHeight) / 2;
+
+    const startStickingAtScrollPoint = centralSectionTop - idealOffsetFromViewport;
+    const endStickingAtScrollPoint =
+      centralSectionTop + centralSectionBB.height - startStickingAtScrollPoint;
+
+    if (window.scrollY >= startStickingAtScrollPoint) {
+      if (window.scrollY >= endStickingAtScrollPoint) {
+        // const absoluteOffset =
+        console.log('bottom');
+        if (stickyStatus !== 'at-bottom') {
+          setAtBottomUnstuck();
+          stickyStatus = 'at-bottom';
+        }
+      } else {
+        console.log('middle');
+        if (stickyStatus !== 'stuck') {
+          setStuck();
+          stickyStatus = 'stuck';
+        }
+        setChartTop(idealOffsetFromViewport);
+      }
+    } else {
+      if (stickyStatus !== 'at-top') {
+        setAtTopUnstuck();
+        stickyStatus = 'at-top';
+      }
+
+      // setChartTop();
+
+      console.log('top');
     }
   }
 
