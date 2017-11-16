@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import type { Projection } from '../types';
 
 type TicksProps = {
   tickSize: number,
@@ -9,27 +10,45 @@ type TicksProps = {
 
 const Ticks = ({ tickSize, extent }: TicksProps) => (
   <div className="ticks">
-    {Array.from({ length: Math.floor(extent / tickSize) }).map((v, i) => {
+    {Array.from({ length: Math.floor(extent / tickSize) + 1 }).map((v, i) => {
       const value = i * tickSize;
 
       const xOffsetPercent = value * (100 / extent);
 
       return (
-        <div key={value} className="tick" style={{ left: `${xOffsetPercent}px` }}>
-          {value}
+        <div key={value} className="tick" style={{ left: `${xOffsetPercent}%` }}>
+          <div className="label">{value}</div>
         </div>
       );
     })}
 
     <style jsx>{`
       .ticks {
-        background: rgba(255, 0, 0, 0.1);
         position: relative;
         height: 100%;
       }
 
       .tick {
         position: absolute;
+        height: 100%;
+      }
+
+      .tick:not(:first-child):after {
+        content: '';
+        display: block;
+        height: 100%;
+        width: 1px;
+        position: absolute;
+        background: gray;
+      }
+
+      .label {
+        font-size: 14px;
+        width: 40px;
+        margin-left: -20px;
+        text-align: center;
+        position: absolute;
+        bottom: -16px;
       }
     `}</style>
   </div>
@@ -39,6 +58,8 @@ type MobileChartProps = {
   heading: string,
   height: number, // including heading, margins
   width: number, // ditto
+  projection: Projection,
+  showCap: boolean,
 };
 
 const MobileChart = ({ heading, height, width }: MobileChartProps) => (
@@ -52,18 +73,23 @@ const MobileChart = ({ heading, height, width }: MobileChartProps) => (
 
     <style jsx>{`
       .mobile-chart {
-        outline: 1px solid red;
         width: ${width}px;
         height: ${height}px;
         position: relative;
-        padding: 10px;
+        padding: 0 20px 40px 10px;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+      }
+
+      h3 {
+        font-size: 18px;
+        font-weight: 400;
       }
 
       .chart-area {
-        outline: 1px solid green;
         position: relative;
+        flex: 1;
       }
     `}</style>
   </div>

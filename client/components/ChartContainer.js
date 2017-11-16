@@ -27,8 +27,6 @@ export default class ChartContainer extends Component<Props> {
     const scene = chartData.scenes[sceneName];
     const projection = chartData.projections[scene.projectionId];
 
-    console.log('projection', projection);
-
     switch (mode) {
       case 'mobile':
         return (
@@ -36,8 +34,8 @@ export default class ChartContainer extends Component<Props> {
             heading={scene.heading}
             width={availableWidth}
             height={availableHeight}
-            // values={projection}
-            // showCap={scene.showCap}
+            projection={projection}
+            showCap={scene.showCap}
           />
         );
       case 'desktop':
