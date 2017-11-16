@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import MobileChart from './MobileChart';
+import DesktopChart from './DesktopChart';
 import getChartData from '../getChartData';
 
 type Props = {
@@ -40,7 +41,9 @@ export default class ChartContainer extends Component<Props> {
           />
         );
       case 'desktop':
-        throw new Error('Not implemented');
+        return (
+          <DesktopChart width={availableWidth} height={availableWidth} heading={scene.heading} />
+        );
       default:
         throw new Error(`Unknown mode: ${mode}`);
     }
