@@ -27,21 +27,15 @@ module.exports = async (env = 'development') => ({
         },
       },
       {
+        test: /\.ya?ml$/,
+        exclude: /(node_modules|bower_components)/,
+        use: ['json-loader', 'yaml-loader'],
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                'env',
-                {
-                  // Via: https://docs.google.com/document/d/1mByh6sT8zI4XRyPKqWVsC2jUfXHZvhshS5SlHErWjXU/view
-                  browsers: ['last 2 versions', 'ie >= 11', 'safari >= 10', 'ios >= 9'],
-                },
-              ],
-            ],
-          },
         },
       },
       {
@@ -78,19 +72,14 @@ module.exports = async (env = 'development') => ({
           {
             loader: 'html-loader',
             options: {
-              attrs: [
-                'img:src',
-                'link:href',
-              ],
+              attrs: ['img:src', 'link:href'],
               root: resolve(__dirname, 'client'),
             },
           },
           {
             loader: 'nunjucks-html-loader',
             options: {
-              searchPaths: [
-                resolve(__dirname, 'views'),
-              ],
+              searchPaths: [resolve(__dirname, 'views')],
               filters: nunjucksFilters,
               context: await getContext(env),
             },
@@ -118,10 +107,7 @@ module.exports = async (env = 'development') => ({
   },
   devServer: {
     hot: false, // Needed for live-reloading Nunjucks templates.
-    allowedHosts: [
-      '.ngrok.io',
-      'local.ft.com',
-    ],
+    allowedHosts: ['.ngrok.io', 'local.ft.com'],
   },
   devtool: 'source-map',
   plugins: [

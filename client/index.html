@@ -3,29 +3,32 @@
 
 {% block article_body %}
 
+<div class="explainer">
+
+<div class="o-grid-container o-typography-wrapper"><div class="o-grid-row"><div data-o-grid-colspan="12 S11 Scenter M9 L8 XL7">
 {% markdown %}
-
-
 Philip Hammond will present his second Budget as chancellor on November 22. Theresa May, the UK’s embattled prime minister, is looking to him to help deliver on the Conservative party’s pledge in this year’s general election to create “a strong economy that works for everyone”.
 
 But events have conspired against the chancellor, leaving him with limited scope for any significant giveaways.
+{% endmarkdown %}
+</div></div></div>
 
-<div class="deficit-chart">
+<div class="deficit-chart" data-chart-data="{{ chartData | dump }}" data-chart-initial-scene="initial-projections">
   <figure class="deficit-chart__figure">
   </figure>
 </div>
 
+<div class="explainer__main-body o-grid-container o-typography-wrapper"><div class="o-grid-row"><div data-o-grid-colspan="12 S11 Scenter Muncenter M6">
+{% markdown %}
 In his last budget, published in March, Mr Hammond set out a plan to reduce public borrowing from £58.3bn this year to £16.8bn by 2021-22.
 
-### [SHOW CHART ANNOTATION, SHOWING HAMMOND'S FISCAL MANDATE WHICH IMPOSES A CAP (£40BN?) ON BORROWING IN 2020-21]
+This gave Mr Hammond <span data-chart-set-scene="with-cap"></span>£25.8bn of headroom against his self-imposed fiscal target of reducing structural borrowing to no more than 2 per cent of national income (or £Xbn) by 2020-21. He said he needed this room for manoeuvre to allow him to accommodate any adverse shocks as the UK leaves the EU.
 
-This gave Mr Hammond £25.8bn of headroom against his self-imposed fiscal target of reducing structural borrowing to no more than 2 per cent of national income (or £Xbn) by 2020-21. He said he needed this room for manoeuvre to allow him to accommodate any adverse shocks as the UK leaves the EU.
-
-### [POSSIBLY WITH MARKER SHOWING SECOND PART OF HAMMOND’S FISCAL MANDATE, WHICH REQUIRES BORROWING TO REACH ZERO BY “THE MID 2020s”) - POSSIBLY ZOOM OUT TEMPORARILY TO EXTEND THE X-AXIS OUT TO THIS DATE??]
+<!-- ##### Longer term <span data-chart-set-scene="mid-twenties"></span> -->
 
 The chancellor has also committed to eliminate borrowing entirely by the mid 2020s.
 
-### [TRANSITION CHART TO STATE 2]
+##### Revised projection <span data-chart-set-scene="revised-projections"></span>
 
 But since March the Conservative government have been forced and chosen to announce some extra spending increases and tax cuts that have cost the exchequer money.
 
@@ -35,13 +38,13 @@ The Conservative government has also agreed to spend an extra £1bn in Northern 
 
 The government also plans to delay the roll-out of its “making tax digital” programme and at the Conservative party conference in October ministers announced an extra £2bn for affordable housing and an extra £10bn for the Help the Buy programme over this parliament.
 
-### [TRANSITION CHART TO STATE 3]
+##### Some improvement <span data-chart-set-scene="good-news"></span>
 
 There has been some good news for Mr Hammond. Even though growth has been slower than expected this year, tax revenues have been higher than the Office for Budget Responsibility predicted in March.
 
 This means borrowing could be around £7bn lower than expected this year. Some of this better performance could also be repeated in future years.
 
-### [TRANSITION CHART TO STATE 4]
+##### New forecast <span data-chart-set-scene="bad-news"></span>
 
 But there has also been some significant bad news for the chancellor. The Office for Budget Responsibility have announced that they plan to lower their forecasts for productivity and economic growth.
 
@@ -49,22 +52,32 @@ Lower growth means less money from tax revenues and more pressure for spending o
 
 The OBR have not yet said exactly how much they will change their forecast. The Institute for Fiscal Studies estimated recently that these changes to the forecast could leave borrowing at £32.6bn in 2020-21.
 
-### [SHOW ANNOTATION HIGHLIGHTING THE REDUCTION IN HEADROOM AGAINST THE TARGET FOR 2020-21]
+That would mean that, in the space of eight months, Mr Hammond has <span data-chart-set-scene="squeezed-headroom">lost half of his headroom</span> against his fiscal target, even before any potential Brexit-related shocks have hit the economy.
+{% endmarkdown %}
+</div></div></div>
 
-That would mean that, in the space of eight months, Mr Hammond has lost half of his headroom against his fiscal target, even before any potential Brexit-related shocks have hit the economy.
+<div style="margin-bottom: 40px" data-marker="unstick"></div>
 
-<div data-marker="unstick"></div>
+<div class="o-grid-container o-typography-wrapper"><div class="o-grid-row"><div data-o-grid-colspan="12 S11 Scenter M9 L8 XL7">
+{% markdown %}
+**TKTK Final text** - Could refer to the other policies that Hammond is under pressure to deliver and what those might cost - lifting cap on public sector pay, extra money for NHS, freezing fuel duty, delivering on Conservative manifesto promise on income tax thresholds etc.
 
-### [ALLOW CHART TO UNSTICK]
+{% endmarkdown %}
+</div></div></div>
 
-FINAL TEXT TKTK - Could refer to the other policies that Hammond is under pressure to deliver and what those might cost - lifting cap on public sector pay, extra money for NHS, freezing fuel duty, delivering on Conservative manifesto promise on income tax thresholds etc.
 
+<div class="o-grid-container"><div class="o-grid-row"><div data-o-grid-colspan="12 S11 Scenter M9 L8 XL7">
+{% if flags.shareButtons %}
+  {% include "includes/share.html" %}
+{% endif %}
+<div style="height:40px"></div>
 {# START MID AD SLOT
     You can move this wherever it works best in your page's design.
     For more control over the size, write your own o-ads div - see
     https://financial-times.github.io/o-ads/docs/developer-guide/display #}
 {% if flags.ads %}{{ macros.middleAd() }}{% endif %}
 {# END MID AD SLOT #}
+</div></div></div>
 
-{% endmarkdown %}
+</div>
 {% endblock %}
