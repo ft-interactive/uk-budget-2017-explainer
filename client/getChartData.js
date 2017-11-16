@@ -8,12 +8,10 @@ import type { ChartData, Scene, Projection } from './types';
  */
 
 const getChartData = (): ChartData => {
-  const container = document.querySelector('.deficit-chart');
-
+  const container = document.querySelector('[data-chart-data]');
   invariant(container, 'Element must exist');
 
   const json = container.getAttribute('data-chart-data');
-
   invariant(json, 'Element must have JSON data');
 
   const parsed = JSON.parse(json);

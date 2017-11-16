@@ -44,6 +44,7 @@
     "bertha-client": "^4.0.1",
     "bower": "^1.8.0",
     "chai": "^4.1.0",
+    "class-names": "^1.0.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.4",
     "d3-time-format": "^2.0.5",
@@ -80,6 +81,7 @@
     "postcss-scss": "^1.0.2",
     "raw-loader": "^0.5.1",
     "react": "^16.1.1",
+    "react-addons-perf": "^15.4.2",
     "react-dom": "^16.1.1",
     "remove-markdown": "^0.2.0",
     "sass-loader": "^6.0.6",
@@ -97,10 +99,8 @@
   "private": true,
   "scripts": {
     "build": "webpack -p --env=production",
-    "check-accessibility":
-      "pa11y --hide-elements '.o-comments' --threshold 100 $(ft-graphics-deploy --get-commit-url)",
-    "check-accessibility:preview":
-      "pa11y --hide-elements '.o-comments' --threshold 100 $(ft-graphics-deploy --preview --get-commit-url)",
+    "check-accessibility": "pa11y --hide-elements '.o-comments' --threshold 100 $(ft-graphics-deploy --get-commit-url)",
+    "check-accessibility:preview": "pa11y --hide-elements '.o-comments' --threshold 100 $(ft-graphics-deploy --preview --get-commit-url)",
     "clean": "rm -rf dist",
     "deploy": "ft-graphics-deploy --assets-prefix=https://ig.ft.com/v2/__assets/",
     "postinstall": "bower install --allow-root",
