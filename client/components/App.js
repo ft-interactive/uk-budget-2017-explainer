@@ -2,6 +2,7 @@
 
 import React, { Component, PureComponent } from 'react';
 import classNames from 'class-names';
+import Chart from './Chart';
 import type { ChartData } from '../types';
 
 type CopyProps = { copyHTML: string };
@@ -9,7 +10,7 @@ type CopyProps = { copyHTML: string };
 class Copy extends PureComponent<CopyProps> {
   render() {
     const { copyHTML } = this.props;
-    console.log('rendering copy container');
+    // console.log('rendering copy container');
 
     // eslint-disable-next-line react/no-danger
     return <div className="copy" dangerouslySetInnerHTML={{ __html: copyHTML }} />;
@@ -55,7 +56,9 @@ export default class App extends Component<AppProps, State> {
       }),
     );
 
-    console.log('waypoints', waypoints);
+    // console.log('waypoints', waypoints);
+
+    this.fullUpdate();
 
     window.addEventListener('scroll', () => {
       this.handleScroll();
@@ -64,8 +67,6 @@ export default class App extends Component<AppProps, State> {
     window.addEventListener('resize', () => {
       this.fullUpdate();
     });
-
-    this.fullUpdate();
 
     // TODO enable this or something like it, maybe also check if foregrounded
     setInterval(() => {
@@ -99,6 +100,8 @@ export default class App extends Component<AppProps, State> {
 
     // TODO measure the maximum scroll depth for each waypoint
 
+    const sceneName = 'initial-projections';
+
     this.handleScroll({
       measurements,
       mode,
@@ -107,12 +110,14 @@ export default class App extends Component<AppProps, State> {
       chartHeight,
       fixedChartYOffsetFromViewport,
       chartWidth,
+      sceneName,
     });
   }
 
   handleScroll(extraState?: Object) {
-    const state = { ...this.state, ...extraState };
+    const state = { ...this.state, ...extraState, live: true };
     state.scrollY = window.scrollY;
+    // console.log('handleScroll', state);
     this.setState(state);
   }
 
@@ -129,6 +134,7 @@ export default class App extends Component<AppProps, State> {
 
   render() {
     const { copyHTML, chartData } = this.props;
+
     const {
       measurements,
       scrollY,
@@ -138,6 +144,8 @@ export default class App extends Component<AppProps, State> {
       stickinessStart,
       stickinessEnd,
       fixedChartYOffsetFromViewport,
+      sceneName,
+      live,
     } = this.state;
 
     let which;
@@ -164,28 +172,26 @@ export default class App extends Component<AppProps, State> {
               which === 'bottom' && 'chart--at-bottom',
             )}
           >
-            <pre style={{ margin: '0' }}>{`
-              asdf
-
-              asdfasdf
-
-              asdfasdf
-
-              asdfadsf
-
-              asdfasdf
-              `}</pre>
+            {live && (
+              <Chart
+                sceneName={sceneName}
+                mode={mode}
+                availableWidth={chartWidth}
+                availableHeight={chartHeight}
+                chartData={chartData}
+              />
+            )}
           </div>
         </div>
 
-        <div className="copy-container">
+        <div className="copy-container o-typography-body">
           <Copy copyHTML={copyHTML} />
         </div>
 
         <style jsx>{`
           .app {
             // padding-top: 10px;
-            outline: 1px solid blue;
+            // outline: 1px solid blue;
             box-sizing: border-box;
             position: relative;
             max-width: 1200px;
