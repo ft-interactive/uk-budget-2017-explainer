@@ -86,7 +86,8 @@ export default class App extends Component<AppProps, State> {
 
     const mode = measurements.viewportWidth < 725 ? 'mobile' : 'desktop';
 
-    const chartHeight = mode === 'desktop' ? 400 : 280;
+    const chartHeight =
+      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 600), 400) : 280;
 
     const chartWidth = mode === 'desktop' ? measurements.appWidth / 2 : measurements.appWidth;
 
