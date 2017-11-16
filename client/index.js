@@ -1,23 +1,15 @@
+// import React from 'react';
+// import ReactDOM from 'react-dom';
 import './styles.scss';
+// import DeficitChart from './components/DeficitChart';
 
-// const stringToColour = (str) => {
-//   let hash = 0;
-//   for (var i = 0; i < str.length; i++) {
-//     hash = str.charCodeAt(i) + ((hash << 5) - hash);
-//   }
-//   let colour = '#';
-//   for (var i = 0; i < 3; i++) {
-//     const value = (hash >> (i * 8)) & 0xff;
-//     colour += `00${value.toString(16)}`.substr(-2);
-//   }
-//   return colour;
-// };
+const chartContainerEl = document.querySelector('.deficit-chart');
+const chartEl = chartContainerEl.querySelector('.deficit-chart__figure');
 
-const chartContainer = document.querySelector('.deficit-chart');
-const chart = chartContainer.querySelector('.deficit-chart__figure');
+// const deficitChart = ReactDOM.render(<DeficitChart />, chartContainerEl);
 
-const chartData = JSON.parse(chartContainer.getAttribute('data-chart-data'));
-const initialSceneName = chartContainer.getAttribute('data-chart-initial-scene');
+const chartData = JSON.parse(chartContainerEl.getAttribute('data-chart-data'));
+const initialSceneName = chartContainerEl.getAttribute('data-chart-initial-scene');
 
 // grab all the 'set-scene' markers
 const sceneChanges = [...document.querySelectorAll('[data-chart-set-scene]')].map(el => ({
@@ -28,21 +20,21 @@ const sceneChanges = [...document.querySelectorAll('[data-chart-set-scene]')].ma
 const unstickMarker = document.querySelector('[data-marker=unstick]');
 
 const setStuck = () => {
-  chart.classList.add('deficit-chart__figure--stuck');
-  chart.classList.remove('deficit-chart__figure--at-bottom');
-  chart.style.top = null;
+  chartEl.classList.add('deficit-chart__figure--stuck');
+  chartEl.classList.remove('deficit-chart__figure--at-bottom');
+  chartEl.style.top = null;
 };
 
 const setAtTopUnstuck = () => {
-  chart.classList.remove('deficit-chart__figure--stuck');
-  chart.classList.remove('deficit-chart__figure--at-bottom');
-  chart.style.top = null;
+  chartEl.classList.remove('deficit-chart__figure--stuck');
+  chartEl.classList.remove('deficit-chart__figure--at-bottom');
+  chartEl.style.top = null;
 };
 
 const setAtBottomUnstuck = (offset) => {
-  chart.classList.add('deficit-chart__figure--at-bottom');
-  chart.classList.remove('deficit-chart__figure--stuck');
-  chart.style.top = `${offset}px`;
+  chartEl.classList.add('deficit-chart__figure--at-bottom');
+  chartEl.classList.remove('deficit-chart__figure--stuck');
+  chartEl.style.top = `${offset}px`;
 };
 
 /**
@@ -61,11 +53,13 @@ const setChartScene = (newSceneName) => {
     projection: chartData.projections.find(({ id }) => id === scene.projection),
   };
 
-  chart.innerHTML = `<pre style-"overflow:hidden">${JSON.stringify(
+  chartEl.innerHTML = `<pre style-"overflow:hidden">${JSON.stringify(
     sceneWithProjection,
     null,
     2,
   )}</pre>`;
+
+  // deficitChart.setState(scene);
 
   // chart.style.background = stringToColour(newSceneName);
 
@@ -74,7 +68,10 @@ const setChartScene = (newSceneName) => {
 };
 
 const updateDisplay = () => {
-  const chartContainerBB = chartContainer.getBoundingClientRect();
+  const isMobileLayout = innerWidth < 765;
+  let stickyStatus; // 0 is top, 1 is middle, 2 is bottom
+
+  const chartContainerBB = chartContainerEl.getBoundingClientRect();
 
   // stick or unstick the chart as appropriate
   {
@@ -86,14 +83,17 @@ const updateDisplay = () => {
       if (chartContainerBB.height - unstickMarkerBB.top > 0) {
         setAtBottomUnstuck(
           // eslint-disable-next-line no-mixed-operators
-          unstickMarkerBB.top + scrollY - (chartContainer.offsetTop + chartContainerBB.height),
+          unstickMarkerBB.top + scrollY - (chartContainerEl.offsetTop + chartContainerBB.height),
         );
+        stickyStatus = 2;
       } else {
         setStuck();
+        stickyStatus = 1;
       }
     } else {
       // we're somewhere near the top of the page; chart shouldn't be stuck here
       setAtTopUnstuck();
+      stickyStatus = 0;
     }
   }
 
