@@ -35,6 +35,7 @@ export default class ChartContainer extends Component<Props> {
             width={availableWidth}
             height={availableHeight}
             projection={projection}
+            barLabels={chartData.barLabels}
             showCap={scene.showCap}
           />
         );

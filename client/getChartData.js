@@ -32,7 +32,7 @@ const getChartData = (): ChartData => {
       return acc;
     }, {}),
 
-    barLabels: ['2017–18', '2018–19', '2019–20', '2020–21', '2021-22'],
+    barLabels: ['Years 2017–18', '2018–19', '2019–20', '2020–21', '2021-22'],
 
     projections: parsed.projections.reduce((acc, p) => {
       acc[p.id] = ([p.y2017, p.y2018, p.y2019, p.y2020, p.y2021]: Projection);
