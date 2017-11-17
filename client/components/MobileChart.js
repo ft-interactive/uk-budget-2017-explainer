@@ -64,14 +64,24 @@ type BarsProps = {
   showCap: boolean,
   highlightCap: boolean,
   fiscalCapValue: number,
+  zoomOut: boolean,
 };
 
-const Bars = ({ projection, labels, extent, showCap, highlightCap, fiscalCapValue }: BarsProps) => (
+const Bars = ({
+  projection,
+  labels,
+  extent,
+  showCap,
+  highlightCap,
+  fiscalCapValue,
+  zoomOut,
+}: BarsProps) => (
   <div
     className={classNames(
       'bars',
       showCap && 'bars--show-cap',
       highlightCap && 'bars--highlight-cap',
+      zoomOut && 'bars--zoom-out',
     )}
   >
     {projection.map((value, i) => {
@@ -112,12 +122,20 @@ const Bars = ({ projection, labels, extent, showCap, highlightCap, fiscalCapValu
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        transition: height 0.25s ease-out;
+      }
+
+      .bars--zoom-out {
+        height: 40%;
+      }
+
+      .bars--zoom-out .label {
+        opacity: 0;
       }
 
       .bar-track {
         position: relative;
         height: 30px;
-        // background: #eee;
       }
 
       .bar-shadow {
@@ -137,10 +155,13 @@ const Bars = ({ projection, labels, extent, showCap, highlightCap, fiscalCapValu
         transition: opacity 0.5s ease-in;
         opacity: 0;
         position: absolute;
-        right: 24px;
+        // right: 24px;
+        right: 10px;
         font-weight: 600;
-        font-size: 24px;
-        top: -8px;
+        // font-size: 26px;
+        font-size: 20px;
+        // top: -10px;
+        top: -6px;
       }
 
       .bar {
@@ -152,6 +173,7 @@ const Bars = ({ projection, labels, extent, showCap, highlightCap, fiscalCapValu
       }
 
       .label {
+        transition: opacity 0.15s linear;
         font-size: 14px;
         line-height: 16px;
         position: absolute;
@@ -170,13 +192,25 @@ const Bars = ({ projection, labels, extent, showCap, highlightCap, fiscalCapValu
         width: 20px;
         font-size: 13px;
         line-height: 13px;
-        // margin-top: -18px;
       }
 
       .bars--show-cap.bars--highlight-cap .headroom-label,
       .bars--show-cap .bar-shadow--headroom,
       .bars--show-cap .fiscal-cap-marker {
         opacity: 1;
+      }
+
+      @media (min-width: 360px) {
+        .headroom-label {
+          font-size: 26px;
+          top: -10px;
+        }
+      }
+
+      @media (min-width: 410px) {
+        .headroom-label {
+          right: 20px;
+        }
       }
     `}</style>
   </div>
@@ -190,6 +224,7 @@ type MobileChartProps = {
   barLabels: string[],
   showCap: boolean,
   highlightCap: boolean,
+  zoomOut: boolean,
 };
 
 const normalChartExtent = 60; // it goes up to 60%
@@ -206,8 +241,9 @@ const MobileChart = ({
   barLabels,
   showCap,
   highlightCap,
+  zoomOut,
 }: MobileChartProps) => (
-  <div className="mobile-chart">
+  <div className={classNames('mobile-chart', zoomOut && 'mobile-chart--zoom-out')}>
     <h3>
       Public sector net borrowing <span>£bn</span>
     </h3>
@@ -222,9 +258,11 @@ const MobileChart = ({
         extent={normalChartExtent}
         showCap={showCap}
         highlightCap={highlightCap}
+        zoomOut={zoomOut}
         fiscalCapValue={40}
       />
-      {/* {showCap && <FiscalCap value={40} extent={normalChartExtent} />} */}
+
+      <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>
     </div>
 
     <style jsx>{`
@@ -263,6 +301,33 @@ const MobileChart = ({
         // outline: 1px solid blue;
         position: relative;
         flex: 1;
+      }
+
+      .zoomed-out-message {
+        opacity: 0;
+        bottom: -60px;
+        position: absolute;
+        height: 50%;
+        color: #1262b3;
+        background-image: linear-gradient(
+          to bottom,
+          rgba(18, 98, 179, 0),
+          rgba(18, 98, 179, 0) 100%
+        );
+        width: 100%;
+        padding-top: 20px;
+        text-align: center;
+        pointer-events: none;
+        transition: opacity 0.15s ease-out, bottom 0.25s ease-out;
+        font-weight: 600;
+        font-size: 22px;
+      }
+
+      .mobile-chart--zoom-out .zoomed-out-message {
+        opacity: 1;
+        background: linear-gradient(to bottom, rgba(18, 98, 179, 0), rgba(18, 98, 179, 0.1) 100%);
+        bottom: -15px;
+        transition: opacity 1s ease-out 0.2s, bottom 0.45s ease-out, background-image 2s linear;
       }
 
       @media (min-width: 490px) {

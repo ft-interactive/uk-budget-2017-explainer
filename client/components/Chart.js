@@ -40,6 +40,7 @@ export default class Chart extends PureComponent<Props> {
             barLabels={chartData.barLabels}
             showCap={scene.showCap}
             highlightCap={scene.highlightCap}
+            zoomOut={scene.zoomOut}
           />
         );
       case 'desktop':

@@ -296,7 +296,7 @@ export default class App extends Component<AppProps, State> {
           }
 
           .copy-container :global(h4) {
-            margin: 80px 0 12px;
+            margin: 120px 0 12px;
             font: 400 20px MetricWeb, sans-serif;
             text-transform: uppercase;
           }
