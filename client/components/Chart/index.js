@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import MobileChart from './MobileChart';
 import DesktopChart from './DesktopChart';
-import type { ChartData } from '../types';
+import type { ChartData } from '../../types';
 
 type Props = {
   sceneName: string,
