@@ -1,7 +1,5 @@
 // @flow
 
-export type Projection = Array<number>;
-
 export type Scene = {
   heading: string,
   projectionId: string,
@@ -11,16 +9,34 @@ export type Scene = {
   highlightHeadroom: boolean,
 };
 
+/**
+ * Cleaned-up Bertha data. Should be treated as Immutable.
+ */
 export type ChartData = {
   scenes: {
     [name: string]: Scene,
   },
 
-  barLabels: Array<string>,
+  barLabels: string[],
 
   projections: {
-    [id: string]: Projection,
+    [id: string]: number[],
   },
 
+  fiscalCap: number,
+};
+
+/**
+ * The props accepted by both the MobileChart and DesktopChart components.
+ */
+export type ChartProps = {
+  heading: string,
+  height: number,
+  width: number,
+  projection: number[],
+  barLabels: string[],
+  showCap: boolean,
+  highlightCap: boolean,
+  zoomOut: boolean,
   fiscalCap: number,
 };

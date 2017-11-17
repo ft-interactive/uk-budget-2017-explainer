@@ -2,10 +2,9 @@
 
 import React from 'react';
 import classNames from 'class-names';
-import type { Projection } from '../../types';
 
 type BarsProps = {
-  projection: Projection,
+  projection: number[],
   labels: string[],
   extent: number,
   showCap: boolean,

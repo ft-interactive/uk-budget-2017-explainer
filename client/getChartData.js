@@ -1,7 +1,7 @@
 // @flow
 
 import invariant from 'invariant';
-import type { ChartData, Scene, Projection } from './types';
+import type { ChartData, Scene } from './types';
 
 /**
  * Grabs Bertha data from a known data attribute on the DOM, cleans it up, and returns it.
@@ -33,7 +33,7 @@ const getChartData = (): ChartData => {
     barLabels: ['2017–18', '2018–19', '2019–20', '2020–21', '2021-22'],
 
     projections: parsed.projections.reduce((acc, p) => {
-      acc[p.id] = ([p.y2017, p.y2018, p.y2019, p.y2020, p.y2021]: Projection);
+      acc[p.id] = ([p.y2017, p.y2018, p.y2019, p.y2020, p.y2021]: number[]);
       return acc;
     }, {}),
 

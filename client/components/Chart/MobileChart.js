@@ -4,19 +4,7 @@ import React from 'react';
 import classNames from 'class-names';
 import Ticks from './Ticks';
 import Bars from './Bars';
-import type { Projection } from '../../types';
-
-type MobileChartProps = {
-  heading: string,
-  height: number,
-  width: number,
-  projection: Projection,
-  barLabels: string[],
-  showCap: boolean,
-  highlightCap: boolean,
-  zoomOut: boolean,
-  fiscalCap: number,
-};
+import type { ChartProps } from '../../types';
 
 const normalChartExtent = 60; // it goes up to 60%
 
@@ -34,7 +22,7 @@ const MobileChart = ({
   highlightCap,
   zoomOut,
   fiscalCap,
-}: MobileChartProps) => (
+}: ChartProps) => (
   <div className={classNames('mobile-chart', zoomOut && 'mobile-chart--zoom-out')}>
     <h3>
       Public sector net borrowing <span>£bn</span>
