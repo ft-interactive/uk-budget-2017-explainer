@@ -1,20 +1,20 @@
-export default (environment = 'development') => ({ // eslint-disable-line
+export default (environment = 'development') => ({
+  // eslint-disable-line
 
   // link file UUID
-  id: '',
+  id: 'a175094a-cba9-11e7-ab18-7a9fb7d6163e',
 
   // canonical URL of the published page
   //  get filled in by the ./configure script
-  url: 'https://ig.ft.com/uk-budget-2017-explainer',
+  url: 'https://ig.ft.com/hammond-boxed-in/',
 
   // To set an exact publish date do this:
-  //       new Date('2016-05-17T17:11:22Z')
-  publishedDate: new Date(),
+  publishedDate: new Date('2017-11-19T11:00:00Z'),
 
-  headline: 'Philip Hammond’s budget 2017',
+  headline: 'How Philip Hammond has been boxed in ahead of the autumn Budget',
 
   // summary === standfirst (Summary is what the content API calls it)
-  summary: 'TKTK',
+  summary: 'Fiscal commitments and economic data leave chancellor with little room for manoeuvre',
 
   topic: {
     name: 'UK Budget',
@@ -35,14 +35,17 @@ export default (environment = 'development') => ({ // eslint-disable-line
     // uuid: 'c4bf0be4-7c15-11e4-a7b8-00144feabdc0',
 
     // You can also provide a URL
-    url: 'http://interactivegraphics.ft-static.com/static/sites/2014/deficit-calculator/main-pic.jpg',
+    url: `https://www.ft.com/__origami/service/image/v2/images/raw/${encodeURIComponent(
+      'http://ft-ig-images-prod.s3-website-eu-west-1.amazonaws.com/v1/8489052638-p75sg.png',
+    )}?source=ig`,
   },
 
   // Byline can by a plain string, markdown, or array of authors
   // if array of authors, url is optional
   byline: [
-    { name: 'Author One', url: '/foo/bar' },
-    { name: 'Author Two' },
+    { name: 'Gemma Tetlow', url: 'https://twitter.com/gemmatetlow' },
+    { name: 'Callum Locke', url: 'https://twitter.com/callumlocke' },
+    { name: 'Caroline Nevitt', url: 'https://twitter.com/carolinenevitt' },
   ],
 
   // Appears in the HTML <title>
@@ -100,7 +103,6 @@ export default (environment = 'development') => ({ // eslint-disable-line
   },
 
   tracking: {
-
     /*
 
     Microsite Name
@@ -112,7 +114,6 @@ export default (environment = 'development') => ({ // eslint-disable-line
     Also used for pages that do not have a UUID for whatever reason
     */
     // micrositeName: '',
-
     /*
     Product name
 

@@ -30,12 +30,12 @@
 <span data-o-component="o-date" class="o-date o-typography-timestamp" datetime="{{ publishedDate | isotime }}">{{ publishedDate | ftdate }}</span>
 {%- endif -%}
 {%- if byline -%}
-<div class="o-typography-author">&nbsp;by&nbsp;
+<span class="byline">&nbsp;&nbsp;
 {%- if byline.push -%}
   {%- for author in byline -%}
     {{ " and " if not loop.first and loop.last else (", " if not loop.first else "") }}
     {%- if author.url -%}
-      <a href="{{ author.url }}">{{ author.name }}</a>
+      <a class="o-typography-author" href="{{ author.url }}">{{ author.name }}</a>
     {%- else -%}
       {{ author.name }}
     {%- endif -%}
@@ -43,5 +43,5 @@
 {%- else -%}
   {{ byline | md(true) }}
 {%- endif -%}
-</div>
+</span>
 {%- endif -%}
