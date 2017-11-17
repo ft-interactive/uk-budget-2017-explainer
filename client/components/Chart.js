@@ -1,31 +1,32 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import MobileChart from './MobileChart';
 import DesktopChart from './DesktopChart';
-import getChartData from '../getChartData';
+import type { ChartData } from '../types';
 
 type Props = {
   sceneName: string,
   mode: 'mobile' | 'desktop',
   availableWidth: number,
   availableHeight: number,
+  chartData: ChartData,
 };
 
-const chartData = getChartData();
+/**
+ * Wrapper whose job is to select between one or the other component. Also prevents unnecessary
+ * re-rendering, by extending PureComponent.
+ */
 
-export default class ChartContainer extends Component<Props> {
-  shouldComponentUpdate(nextProps: Props) {
-    // simple shallow comparison
-    return Object.keys(nextProps).some(key => this.props[key] !== nextProps[key]);
-  }
-
+export default class Chart extends PureComponent<Props> {
   props: Props;
 
   render() {
-    const { sceneName, mode, availableWidth, availableHeight } = this.props;
+    const { chartData, sceneName, mode, availableWidth, availableHeight } = this.props;
 
     const scene = chartData.scenes[sceneName];
+    if (!scene) throw new Error(`Unknown scene: ${sceneName}`);
+
     const projection = chartData.projections[scene.projectionId];
 
     switch (mode) {
@@ -38,6 +39,8 @@ export default class ChartContainer extends Component<Props> {
             projection={projection}
             barLabels={chartData.barLabels}
             showCap={scene.showCap}
+            highlightCap={scene.highlightCap}
+            zoomOut={scene.zoomOut}
           />
         );
       case 'desktop':

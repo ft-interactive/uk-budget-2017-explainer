@@ -9,3 +9,4 @@ rules:
   import/no-extraneous-dependencies: [error, {}]
   no-lone-blocks: off
   react/jsx-filename-extension: off
+  no-mixed-operators: off # incompatible with prettier

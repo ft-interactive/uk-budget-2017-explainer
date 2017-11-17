@@ -8,12 +8,10 @@ import type { ChartData, Scene, Projection } from './types';
  */
 
 const getChartData = (): ChartData => {
-  const container = document.querySelector('.deficit-chart');
-
+  const container = document.querySelector('[data-chart-data]');
   invariant(container, 'Element must exist');
 
   const json = container.getAttribute('data-chart-data');
-
   invariant(json, 'Element must have JSON data');
 
   const parsed = JSON.parse(json);
@@ -23,16 +21,16 @@ const getChartData = (): ChartData => {
       acc[s.name] = ({
         heading: s.heading,
         projectionId: s.projection,
-        showCap: s.showcap,
-        pulseCap: s.pulsecap,
-        zoomOut: s.zoomout,
-        highlightHeadroom: s.highlightheadroom,
+        showCap: Boolean(s.showcap),
+        highlightCap: Boolean(s.highlightcap),
+        zoomOut: Boolean(s.zoomout),
+        highlightHeadroom: Boolean(s.highlightheadroom),
       }: Scene);
 
       return acc;
     }, {}),
 
-    barLabels: ['Years 2017–18', '2018–19', '2019–20', '2020–21', '2021-22'],
+    barLabels: ['2017–18', '2018–19', '2019–20', '2020–21', '2021-22'],
 
     projections: parsed.projections.reduce((acc, p) => {
       acc[p.id] = ([p.y2017, p.y2018, p.y2019, p.y2020, p.y2021]: Projection);

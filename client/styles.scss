@@ -2,100 +2,114 @@
 @import 'o-grid/main';
 @import './components/core/main';
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 .explainer {
-  box-sizing: border-box;
+  &__central-section {
+    min-height: 1500px;
 
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
-  }
-}
-
-$chart-height: 280px;
-
-.deficit-chart {
-  height: $chart-height;
-  width: 100%;
-  margin: 0 auto 30px;
-  position: relative;
-  cursor: default;
-
-  &__figure {
-    display: block;
-    height: $chart-height;
-    width: 100%;
-    padding: 10px;
-    margin: 0;
-    // transition: background-color, box-shadow 0.25s, 0.25s linear, linear;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &--stuck {
-      position: fixed;
-      top: 0;
-      left: 0;
-      box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
-      background: white;
-    }
-
-    &--at-bottom {
-      position: absolute;
-      left: 0;
-      background: #fff1e5;
-    }
-  }
-}
-
-@include oGridRespondTo(M) {
-  $chart-height: 300px; // this is the single source of truth; affects sticky logic and chart drawing.
-
-  .explainer {
-    &__central-section {
-      outline: 1px solid blue;
-      margin-top: 40px;
-      position: relative;
-    }
-
-    &__main-body {
-      width: 50%;
-      margin-left: 0;
-      margin-right: 0;
-    }
-
-    h5 {
-      margin-top: 100px;
-    }
-  }
-
-  .deficit-chart {
-    position: absolute;
-    right: 0;
-    margin-top: 0;
-    top: 0;
-    width: 50%;
-    height: $chart-height;
-    outline: 1px solid pink;
-
-    &__figure {
-      height: $chart-height;
-      overflow: hidden;
-      outline: 1px solid purple;
-
-      &--stuck {
-        left: auto;
-        width: 50%;
-        box-shadow: none;
-        background: transparent;
+    .enhanced &:not(.explainer__central-section--ready) {
+      &:before {
+        content: 'Loading...';
+        text-align: center;
+        display: block;
+        margin-top: 40px;
       }
 
-      &--at-bottom {
-        // position: absolute;
-        // left: 0;
-        background: transparent;
+      > * {
+        display: none;
       }
     }
   }
 }
+
+// $chart-height: 280px;
+//
+// .deficit-chart {
+//   height: $chart-height;
+//   width: 100%;
+//   margin: 0 auto 30px;
+//   position: relative;
+//   cursor: default;
+//
+//   &__figure {
+//     display: block;
+//     height: $chart-height;
+//     width: 100%;
+//     padding: 10px;
+//     margin: 0;
+//     // transition: background-color, box-shadow 0.25s, 0.25s linear, linear;
+//     z-index: 2;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//
+//     &--stuck {
+//       position: fixed;
+//       top: 0;
+//       left: 0;
+//       box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+//       background: white;
+//     }
+//
+//     &--at-bottom {
+//       position: absolute;
+//       left: 0;
+//       background: #fff1e5;
+//     }
+//   }
+// }
+//
+// @include oGridRespondTo(M) {
+//   $chart-height: 300px; // this is the single source of truth; affects sticky logic and chart drawing.
+//
+//   .explainer {
+//     &__central-section {
+//       outline: 1px solid blue;
+//       margin-top: 40px;
+//       position: relative;
+//     }
+//
+//     &__main-body {
+//       width: 50%;
+//       margin-left: 0;
+//       margin-right: 0;
+//     }
+//
+//     h5 {
+//       margin-top: 100px;
+//     }
+//   }
+//
+//   .deficit-chart {
+//     position: absolute;
+//     right: 0;
+//     margin-top: 0;
+//     top: 0;
+//     width: 50%;
+//     height: $chart-height;
+//     outline: 1px solid pink;
+//
+//     &__figure {
+//       height: $chart-height;
+//       overflow: hidden;
+//       outline: 1px solid purple;
+//
+//       &--stuck {
+//         left: auto;
+//         width: 50%;
+//         box-shadow: none;
+//         background: transparent;
+//       }
+//
+//       &--at-bottom {
+//         // position: absolute;
+//         // left: 0;
+//         background: transparent;
+//       }
+//     }
+//   }
+// }

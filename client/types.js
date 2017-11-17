@@ -6,7 +6,7 @@ export type Scene = {
   heading: string,
   projectionId: string,
   showCap: boolean,
-  pulseCap: boolean,
+  highlightCap: boolean,
   zoomOut: boolean,
   highlightHeadroom: boolean,
 };
