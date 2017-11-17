@@ -11,6 +11,7 @@ type BarsProps = {
   highlightCap: boolean,
   fiscalCap: number,
   zoomOut: boolean,
+  ghostMarkers: null | number[],
 };
 
 const Bars = ({
@@ -21,6 +22,7 @@ const Bars = ({
   highlightCap,
   fiscalCap,
   zoomOut,
+  ghostMarkers,
 }: BarsProps) => (
   <div
     className={classNames(
@@ -60,6 +62,16 @@ const Bars = ({
           ) : null}
 
           <div key={i.toString()} className="bar" style={{ width: `${valueX}%` }} />
+
+          {ghostMarkers ? (
+            <div
+              className={classNames(
+                'ghost-marker',
+                ghostMarkers[i] <= value && 'ghost-marker--within-bar',
+              )}
+              style={{ left: `${ghostMarkers[i] * multiplier}%` }}
+            />
+          ) : null}
 
           {isCapYear ? (
             <div className="fiscal-cap-marker" style={{ left: `${capX}%` }}>
@@ -139,6 +151,22 @@ const Bars = ({
         transition: width 0.5s ease-out;
         position: absolute;
         top: 16px;
+      }
+
+      .ghost-marker {
+        background-image: linear-gradient(#999 40%, rgba(255, 255, 255, 0) 0%);
+        background-position: right;
+        background-size: 2px 3.5px;
+        background-repeat: repeat-y;
+        height: 12px;
+        width: 2px;
+        top: 16px;
+        position: absolute;
+        transition: background-image 1s linear 1s;
+      }
+
+      .ghost-marker--within-bar {
+        background-image: linear-gradient(white 40%, rgba(255, 255, 255, 0) 0%);
       }
 
       .label {

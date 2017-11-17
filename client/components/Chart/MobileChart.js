@@ -22,6 +22,7 @@ const MobileChart = ({
   highlightCap,
   zoomOut,
   fiscalCap,
+  ghostMarkers,
 }: ChartProps) => (
   <div className={classNames('mobile-chart', zoomOut && 'mobile-chart--zoom-out')}>
     <h3>
@@ -40,6 +41,7 @@ const MobileChart = ({
         highlightCap={highlightCap}
         zoomOut={zoomOut}
         fiscalCap={fiscalCap}
+        ghostMarkers={ghostMarkers}
       />
 
       <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>

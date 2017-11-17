@@ -7,6 +7,7 @@ export type Scene = {
   highlightCap: boolean,
   zoomOut: boolean,
   highlightHeadroom: boolean,
+  ghostMarkers: null | number[],
 };
 
 /**
@@ -39,4 +40,5 @@ export type ChartProps = {
   highlightCap: boolean,
   zoomOut: boolean,
   fiscalCap: number,
+  ghostMarkers: null | number[],
 };
