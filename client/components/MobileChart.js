@@ -124,6 +124,11 @@ const MobileChart = ({ heading, height, width, projection, barLabels }: MobileCh
       .mobile-chart {
         width: ${width}px;
         height: ${height}px;
+      }
+    `}</style>
+
+    <style jsx>{`
+      .mobile-chart {
         position: relative;
         padding: 10px 30px 40px 10px;
         display: flex;

@@ -228,6 +228,22 @@ export default class App extends Component<AppProps, State> {
           <Copy copyHTML={copyHTML} />
         </div>
 
+        <style jsx>
+          {`
+            .chart-container {
+              height: ${chartHeight}px;
+            }
+
+            .chart {
+              height: ${chartHeight}px;
+              width: ${chartWidth}px;
+            }
+
+            .chart--stuck {
+              top: ${fixedChartYOffsetFromViewport}px;
+            }
+          `}
+        </style>
         <style jsx>{`
           .app {
             // padding-top: 10px;
@@ -244,18 +260,8 @@ export default class App extends Component<AppProps, State> {
             box-sizing: inherit;
           }
 
-          .chart-container {
-            height: ${chartHeight}px;
-          }
-
-          .chart {
-            height: ${chartHeight}px;
-            width: ${chartWidth}px;
-          }
-
           .chart--stuck {
             position: fixed;
-            top: ${fixedChartYOffsetFromViewport}px;
           }
 
           .chart--at-bottom {

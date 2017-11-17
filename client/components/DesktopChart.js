@@ -22,6 +22,10 @@ const DesktopChart = ({ heading, width, height }: DesktopChartProps) => (
       .desktop-chart {
         width: ${width}px;
         height: ${height}px;
+      }
+    `}</style>
+    <style jsx>{`
+      .desktop-chart {
         position: relative;
         display: flex;
         flex-direction: column;
