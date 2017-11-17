@@ -15,6 +15,7 @@ type MobileChartProps = {
   showCap: boolean,
   highlightCap: boolean,
   zoomOut: boolean,
+  fiscalCap: number,
 };
 
 const normalChartExtent = 60; // it goes up to 60%
@@ -32,6 +33,7 @@ const MobileChart = ({
   showCap,
   highlightCap,
   zoomOut,
+  fiscalCap,
 }: MobileChartProps) => (
   <div className={classNames('mobile-chart', zoomOut && 'mobile-chart--zoom-out')}>
     <h3>
@@ -49,7 +51,7 @@ const MobileChart = ({
         showCap={showCap}
         highlightCap={highlightCap}
         zoomOut={zoomOut}
-        fiscalCapValue={46.4}
+        fiscalCap={fiscalCap}
       />
 
       <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>

@@ -10,7 +10,7 @@ type BarsProps = {
   extent: number,
   showCap: boolean,
   highlightCap: boolean,
-  fiscalCapValue: number,
+  fiscalCap: number,
   zoomOut: boolean,
 };
 
@@ -20,7 +20,7 @@ const Bars = ({
   extent,
   showCap,
   highlightCap,
-  fiscalCapValue,
+  fiscalCap,
   zoomOut,
 }: BarsProps) => (
   <div
@@ -35,7 +35,7 @@ const Bars = ({
       const isCapYear = i === 3;
       const multiplier = 100 / extent;
       const valueX = value * multiplier;
-      const capX = fiscalCapValue * multiplier;
+      const capX = fiscalCap * multiplier;
       const headroomWidth = capX - valueX;
       const smallHeadroom = headroomWidth < 40;
 
@@ -56,7 +56,7 @@ const Bars = ({
             >
               <div
                 className={classNames('headroom-label', smallHeadroom && 'headroom-label--small')}
-              >{`£${Math.round((fiscalCapValue - value) * 10) / 10}bn`}</div>
+              >{`£${Math.round((fiscalCap - value) * 10) / 10}bn`}</div>
             </div>
           ) : null}
 

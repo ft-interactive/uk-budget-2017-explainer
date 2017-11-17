@@ -21,4 +21,6 @@ export type ChartData = {
   projections: {
     [id: string]: Projection,
   },
+
+  fiscalCap: number,
 };

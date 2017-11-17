@@ -16,7 +16,7 @@ const getChartData = (): ChartData => {
 
   const parsed = JSON.parse(json);
 
-  const chartData = {
+  const chartData: ChartData = {
     scenes: parsed.scenes.reduce((acc, s) => {
       acc[s.name] = ({
         heading: s.heading,
@@ -36,6 +36,8 @@ const getChartData = (): ChartData => {
       acc[p.id] = ([p.y2017, p.y2018, p.y2019, p.y2020, p.y2021]: Projection);
       return acc;
     }, {}),
+
+    fiscalCap: parsed.options.fiscalCap,
   };
 
   return chartData;
