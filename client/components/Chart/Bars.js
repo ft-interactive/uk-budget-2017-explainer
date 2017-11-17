@@ -3,6 +3,8 @@
 import React from 'react';
 import classNames from 'class-names';
 
+const CAP_YEAR_INDEX = 3; // index of the year 2020-21 in projection array
+
 type BarsProps = {
   projection: number[],
   labels: string[],
@@ -35,7 +37,7 @@ const Bars = ({
     )}
   >
     {projection.map((value, i) => {
-      const isCapYear = i === 3;
+      const isCapYear = i === CAP_YEAR_INDEX;
       const multiplier = 100 / extent;
       const valueX = value * multiplier;
       const capX = fiscalCap * multiplier;
@@ -43,7 +45,13 @@ const Bars = ({
       const smallHeadroom = headroomWidth < 40;
 
       return (
-        <div key={i.toString()} className="bar-track">
+        <div
+          key={i.toString()}
+          className={classNames(
+            'bar-track',
+            isCapYear ? 'bar-track--cap-year' : 'bar-track--non-cap-year',
+          )}
+        >
           <div className="label">
             {i === 0 && 'Years '}
             {labels[i]}
@@ -120,7 +128,7 @@ const Bars = ({
 
       .bar-shadow {
         height: 12px;
-        background: #ddd;
+        background: #e1e0df;
         transition: width 0.5s ease-out;
         position: absolute;
         top: 16px;
@@ -129,12 +137,17 @@ const Bars = ({
       .bar-shadow--headroom {
         opacity: 0;
         transition: opacity 0.2s ease-out;
+        box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
       }
 
-      .bar-shadow--danger {
-        background: hsla(10, 40%, 80%, 1);
-        transition: background-color 1s linear;
-      }
+      // .bar-shadow--danger {
+      // background: hsla(10, 40%, 80%, 1);
+      // transition: background-color 1s linear;
+      // }
+
+      // .bar-shadow--danger .headroom-label {
+      //   color: #601c2e;
+      // }
 
       .headroom-label {
         transition: opacity 0.2s ease-in 0s;
@@ -168,8 +181,8 @@ const Bars = ({
 
       .bar {
         height: 12px;
-        background: #1262b3;
-        transition: width 0.5s ease-out;
+        background: #394795;
+        transition: width 0.5s ease-out, background-color 0.3s linear;
         position: absolute;
         top: 16px;
       }
@@ -212,6 +225,18 @@ const Bars = ({
       .bars--show-cap .bar-shadow--headroom,
       .bars--show-cap .fiscal-cap-marker {
         opacity: 1;
+      }
+
+      .bars--show-cap.bars--highlight-cap .bar-track--cap-year .label {
+        font-weight: 500;
+      }
+
+      .bars--show-cap.bars--highlight-cap .bar-track--non-cap-year .label {
+        opacity: 0.7;
+      }
+
+      .bars--show-cap.bars--highlight-cap .bar-track--non-cap-year .bar {
+        background-color: #a1b2db;
       }
 
       @media (min-width: 360px) {
