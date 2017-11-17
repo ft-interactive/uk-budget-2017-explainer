@@ -7,6 +7,8 @@ import Chart from './Chart';
 import Copy from './Copy';
 import type { ChartData } from '../types';
 
+const chartStuckBottomOffset = 40;
+
 type AppProps = {
   copyHTML: string,
   chartData: ChartData,
@@ -96,9 +98,10 @@ export default class App extends Component<AppProps, State> {
     const mode = measurements.viewportWidth < 725 ? 'mobile' : 'desktop';
 
     const chartHeight =
-      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 340), 280) : 280;
+      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 300), 280) : 280;
 
-    const chartWidth = mode === 'desktop' ? measurements.appWidth / 2 : measurements.appWidth;
+    const chartWidth =
+      mode === 'desktop' ? Math.min(measurements.appWidth / 2, 500) : measurements.appWidth;
 
     const fixedChartYOffsetFromViewport =
       mode === 'desktop' ? (measurements.viewportHeight - chartHeight) / 2 : 0;
@@ -106,7 +109,9 @@ export default class App extends Component<AppProps, State> {
     // determine the maximum scroll depth for each stickiness state
     const stickinessStart = this.element.offsetTop - fixedChartYOffsetFromViewport;
     const stickinessEnd =
-      this.element.offsetTop + appBox.height - (chartHeight + fixedChartYOffsetFromViewport);
+      this.element.offsetTop +
+      appBox.height -
+      (chartHeight + fixedChartYOffsetFromViewport + chartStuckBottomOffset);
 
     const viewableTextHeight = measurements.viewportHeight - (mode === 'mobile' ? chartHeight : 0);
 
@@ -268,7 +273,7 @@ export default class App extends Component<AppProps, State> {
 
           .chart--at-bottom {
             position: absolute;
-            bottom: 0;
+            bottom: ${chartStuckBottomOffset}px;
           }
 
           .app--mobile .chart {
@@ -300,7 +305,9 @@ export default class App extends Component<AppProps, State> {
 
           .app--desktop .copy-container {
             width: 50%;
+            max-width: 450px;
             padding: 0 20px;
+            margin-left: auto;
           }
 
           .copy-container :global(hr) {
