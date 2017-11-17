@@ -40,6 +40,7 @@ export default class Chart extends PureComponent<Props> {
       zoomOut: scene.zoomOut,
       fiscalCap: chartData.fiscalCap,
       ghostMarkers: scene.ghostMarkers,
+      ghostBars: scene.ghostBars,
     };
 
     switch (mode) {

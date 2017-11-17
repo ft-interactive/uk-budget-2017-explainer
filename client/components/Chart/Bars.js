@@ -12,6 +12,7 @@ type BarsProps = {
   fiscalCap: number,
   zoomOut: boolean,
   ghostMarkers: null | number[],
+  ghostBars: null | number[],
 };
 
 const Bars = ({
@@ -23,6 +24,7 @@ const Bars = ({
   fiscalCap,
   zoomOut,
   ghostMarkers,
+  ghostBars,
 }: BarsProps) => (
   <div
     className={classNames(
@@ -41,7 +43,7 @@ const Bars = ({
       const smallHeadroom = headroomWidth < 40;
 
       return (
-        <div className="bar-track">
+        <div key={i.toString()} className="bar-track">
           <div className="label">
             {i === 0 && 'Years '}
             {labels[i]}
@@ -61,7 +63,18 @@ const Bars = ({
             </div>
           ) : null}
 
-          <div key={i.toString()} className="bar" style={{ width: `${valueX}%` }} />
+          {ghostBars ? (
+            <div
+              className={classNames('ghost-bar')}
+              style={{ width: `${ghostBars[i] * multiplier}%` }}
+            />
+          ) : null}
+
+          {/* {(() => {
+            console.log('ghostBars', ghostBars);
+          })()} */}
+
+          <div className="bar" style={{ width: `${valueX}%` }} />
 
           {ghostMarkers ? (
             <div
@@ -143,6 +156,14 @@ const Bars = ({
 
       .bars--show-cap.bars--highlight-cap .headroom-label {
         transition: opacity 0.8s ease-in 0.2s;
+      }
+
+      .ghost-bar {
+        background: hsla(210, 82%, 39%, 0.05);
+        position: absolute;
+        top: 16px;
+        height: 12px;
+        border: 1px dashed hsla(210, 82%, 39%, 0.4);
       }
 
       .bar {

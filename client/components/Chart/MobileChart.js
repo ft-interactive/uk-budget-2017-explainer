@@ -1,4 +1,8 @@
-// @flow
+/**
+ * The component responsible for rendering the chart on mobile.
+ *
+ * @flow
+ */
 
 import React from 'react';
 import classNames from 'class-names';
@@ -6,11 +10,7 @@ import Ticks from './Ticks';
 import Bars from './Bars';
 import type { ChartProps } from '../../types';
 
-const normalChartExtent = 60; // it goes up to 60%
-
-/**
- * The component responsible for rendering the chart on mobile
- */
+const normalChartExtent = 60; // chart goes up to 60%
 
 const MobileChart = ({
   heading,
@@ -23,6 +23,7 @@ const MobileChart = ({
   zoomOut,
   fiscalCap,
   ghostMarkers,
+  ghostBars,
 }: ChartProps) => (
   <div className={classNames('mobile-chart', zoomOut && 'mobile-chart--zoom-out')}>
     <h3>
@@ -42,6 +43,7 @@ const MobileChart = ({
         zoomOut={zoomOut}
         fiscalCap={fiscalCap}
         ghostMarkers={ghostMarkers}
+        ghostBars={ghostBars}
       />
 
       <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>
@@ -61,7 +63,6 @@ const MobileChart = ({
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        // outline: 1px solid red;
       }
 
       h3 {

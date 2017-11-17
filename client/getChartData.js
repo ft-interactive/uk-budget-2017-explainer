@@ -31,6 +31,15 @@ const getChartData = (): ChartData => {
       }
     }
 
+    let ghostBars = null;
+    if (s.ghostbars) {
+      ghostBars = projections[s.ghostbars];
+
+      if (!ghostBars) {
+        throw new Error(`Unknown projectionId in ghostbars field: ${s.ghostmakers}`);
+      }
+    }
+
     acc[s.name] = ({
       heading: s.heading,
       projectionId: s.projection,
@@ -39,6 +48,7 @@ const getChartData = (): ChartData => {
       zoomOut: Boolean(s.zoomout),
       highlightHeadroom: Boolean(s.highlightheadroom),
       ghostMarkers,
+      ghostBars,
     }: Scene);
 
     return acc;
