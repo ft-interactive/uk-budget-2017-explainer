@@ -1,6 +1,7 @@
 // @flow
 
 import React, { Component, PureComponent } from 'react';
+import invariant from 'invariant';
 import classNames from 'class-names';
 import Chart from './Chart';
 import type { ChartData } from '../types';
@@ -33,7 +34,13 @@ type State = {
   scrollY: number,
   measurements: Measurements,
   mode: 'mobile' | 'desktop',
+  waypoints: Array<{
+    name: string,
+    scrollYThreshold: number,
+  }>,
 };
+
+type WaypointsCache = Array<{ el: HTMLElement, name: string }>;
 
 export default class App extends Component<AppProps, State> {
   state = {
@@ -45,19 +52,10 @@ export default class App extends Component<AppProps, State> {
       viewportWidth: 0,
       viewportHeight: 0,
     },
+    waypoints: [],
   };
 
   componentDidMount() {
-    // grab waypoints
-    const waypoints = [...this.element.querySelectorAll('.copy-container [data-chart-scene]')].map(
-      el => ({
-        el,
-        name: el.getAttribute('data-chart-scene'),
-      }),
-    );
-
-    // console.log('waypoints', waypoints);
-
     this.fullUpdate();
 
     window.addEventListener('scroll', () => {
@@ -99,9 +97,27 @@ export default class App extends Component<AppProps, State> {
     const stickinessEnd =
       this.element.offsetTop + appBox.height - (chartHeight + fixedChartYOffsetFromViewport);
 
-    // TODO measure the maximum scroll depth for each waypoint
+    // determine the maximum scroll depth for each waypoint
+    const waypoints = (() => {
+      // query for them [again] only if necessary
+      let waypointsCache = this.waypointsCache;
+      if (!waypointsCache || !waypointsCache.some(({ el }) => el.parentNode)) {
+        waypointsCache = [
+          ...this.element.querySelectorAll('.copy-container [data-chart-scene]'),
+        ].map(el => ({
+          el,
+          name: el.getAttribute('data-chart-scene'),
+        }));
 
-    const sceneName = 'initial-projections';
+        this.waypointsCache = (waypointsCache: WaypointsCache);
+      }
+
+      return this.waypointsCache.map(({ el, name }) => ({
+        name,
+        scrollYThreshold:
+          el.getBoundingClientRect().top + window.scrollY - (fixedChartYOffsetFromViewport + 20),
+      }));
+    })();
 
     this.handleScroll({
       measurements,
@@ -111,27 +127,47 @@ export default class App extends Component<AppProps, State> {
       chartHeight,
       fixedChartYOffsetFromViewport,
       chartWidth,
-      sceneName,
+      waypoints,
     });
   }
 
   handleScroll(extraState?: Object) {
-    const state = { ...this.state, ...extraState, live: true };
+    const state = {
+      ...this.state,
+      ...extraState,
+      live: true,
+    };
+
     state.scrollY = window.scrollY;
-    // console.log('handleScroll', state);
+
+    // work out current scene
+    // const tripwire = state.viewportHeight - (state.chartHeight - 60);
+
+    // const withinViewport = sceneChanges
+    //   .map(({ el, name }) => {
+    //     if (el.getBoundingClientRect().bottom < tripwire) {
+    //       return name;
+    //     }
+    //     return null;
+    //   })
+    //   .filter(x => x);
+    //
+
+    state.sceneName = 'initial-projections';
+    for (let i = state.waypoints.length - 1; i >= 0; i -= 1) {
+      const waypoint = state.waypoints[i];
+      if (waypoint.scrollYThreshold < state.scrollY) {
+        state.sceneName = waypoint.name;
+        break;
+      }
+    }
+
     this.setState(state);
   }
 
   props: AppProps;
   element: HTMLDivElement;
-
-  // waypoints: {
-  //   sceneName: string,
-  //   yScroll: number,
-  // };
-
-  // measurements: Measurements;
-  // mode: 'mobile' | 'desktop';
+  waypointsCache: WaypointsCache;
 
   render() {
     const { copyHTML, chartData } = this.props;
