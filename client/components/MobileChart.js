@@ -107,6 +107,10 @@ type MobileChartProps = {
 
 const normalChartExtent = 60; // it goes up to 60%
 
+/**
+ * The component responsible for rendering the chart on mobile
+ */
+
 const MobileChart = ({ heading, height, width, projection, barLabels }: MobileChartProps) => (
   <div className="mobile-chart">
     <h3>{heading}</h3>

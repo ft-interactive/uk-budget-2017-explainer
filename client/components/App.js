@@ -1,22 +1,11 @@
 // @flow
 
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import invariant from 'invariant';
 import classNames from 'class-names';
 import Chart from './Chart';
+import Copy from './Copy';
 import type { ChartData } from '../types';
-
-type CopyProps = { copyHTML: string };
-
-class Copy extends PureComponent<CopyProps> {
-  render() {
-    const { copyHTML } = this.props;
-    // console.log('rendering copy container');
-
-    // eslint-disable-next-line react/no-danger
-    return <div className="copy" dangerouslySetInnerHTML={{ __html: copyHTML }} />;
-  }
-}
 
 type AppProps = {
   copyHTML: string,
@@ -34,16 +23,27 @@ type State = {
   scrollY: number,
   measurements: Measurements,
   mode: 'mobile' | 'desktop',
+  chartHeight: number,
+  chartWidth: number,
   waypoints: Array<{
     name: string,
     scrollYThreshold: number,
   }>,
+  stickinessStart: number,
+  stickinessEnd: number,
+  fixedChartYOffsetFromViewport: number,
+  sceneName: string,
+  live: boolean,
 };
 
 type WaypointsCache = Array<{ el: HTMLElement, name: string }>;
 
+/**
+ * Watches the window size and scroll position and updates the layout accordingly.
+ */
+
 export default class App extends Component<AppProps, State> {
-  state = {
+  state: State = {
     mode: 'mobile',
     scrollY: 0,
     measurements: {
@@ -53,6 +53,13 @@ export default class App extends Component<AppProps, State> {
       viewportHeight: 0,
     },
     waypoints: [],
+    chartHeight: 0,
+    chartWidth: 0,
+    live: false,
+    fixedChartYOffsetFromViewport: 0,
+    sceneName: 'initial-projections',
+    stickinessStart: 0,
+    stickinessEnd: 0,
   };
 
   componentDidMount() {
@@ -97,6 +104,14 @@ export default class App extends Component<AppProps, State> {
     const stickinessEnd =
       this.element.offsetTop + appBox.height - (chartHeight + fixedChartYOffsetFromViewport);
 
+    const viewableTextHeight = measurements.viewportHeight - (mode === 'mobile' ? chartHeight : 0);
+
+    // make an offset so the waypoint has to be about 1/3 of the way down the visible text
+    const waypointOffset =
+      mode === 'mobile'
+        ? 0 - chartHeight + viewableTextHeight * (1 / -3)
+        : viewableTextHeight * (1 / -3);
+
     // determine the maximum scroll depth for each waypoint
     const waypoints = (() => {
       // query for them [again] only if necessary
@@ -109,13 +124,15 @@ export default class App extends Component<AppProps, State> {
           name: el.getAttribute('data-chart-scene'),
         }));
 
+        invariant(waypointsCache.every(({ el, name }) => el && name), 'OK');
+
+        // $FlowFixMe
         this.waypointsCache = (waypointsCache: WaypointsCache);
       }
 
       return this.waypointsCache.map(({ el, name }) => ({
         name,
-        scrollYThreshold:
-          el.getBoundingClientRect().top + window.scrollY - (fixedChartYOffsetFromViewport + 20),
+        scrollYThreshold: el.getBoundingClientRect().top + window.scrollY + waypointOffset,
       }));
     })();
 
@@ -140,19 +157,6 @@ export default class App extends Component<AppProps, State> {
 
     state.scrollY = window.scrollY;
 
-    // work out current scene
-    // const tripwire = state.viewportHeight - (state.chartHeight - 60);
-
-    // const withinViewport = sceneChanges
-    //   .map(({ el, name }) => {
-    //     if (el.getBoundingClientRect().bottom < tripwire) {
-    //       return name;
-    //     }
-    //     return null;
-    //   })
-    //   .filter(x => x);
-    //
-
     state.sceneName = 'initial-projections';
     for (let i = state.waypoints.length - 1; i >= 0; i -= 1) {
       const waypoint = state.waypoints[i];
@@ -173,7 +177,6 @@ export default class App extends Component<AppProps, State> {
     const { copyHTML, chartData } = this.props;
 
     const {
-      measurements,
       scrollY,
       mode,
       chartHeight,

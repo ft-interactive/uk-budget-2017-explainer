@@ -8,6 +8,10 @@ type DesktopChartProps = {
   height: number,
 };
 
+/**
+ * The component responsible for rendering the chart on desktop.
+ */
+
 const DesktopChart = ({ heading, width, height }: DesktopChartProps) => (
   <div className="desktop-chart">
     <h3>{heading}</h3>

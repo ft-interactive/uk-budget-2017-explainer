@@ -3,7 +3,6 @@
 import React, { PureComponent } from 'react';
 import MobileChart from './MobileChart';
 import DesktopChart from './DesktopChart';
-import getChartData from '../getChartData';
 import type { ChartData } from '../types';
 
 type Props = {
@@ -13,6 +12,11 @@ type Props = {
   availableHeight: number,
   chartData: ChartData,
 };
+
+/**
+ * Wrapper whose job is to select between one or the other component. Also prevents unnecessary
+ * re-rendering, by extending PureComponent.
+ */
 
 export default class Chart extends PureComponent<Props> {
   props: Props;
