@@ -15,6 +15,7 @@ type BarsProps = {
   zoomOut: boolean,
   ghostMarkers: null | number[],
   ghostBars: null | number[],
+  vertical: boolean | void,
 };
 
 const Bars = ({
@@ -27,6 +28,7 @@ const Bars = ({
   zoomOut,
   ghostMarkers,
   ghostBars,
+  vertical,
 }: BarsProps) => (
   <div
     className={classNames(
@@ -34,6 +36,7 @@ const Bars = ({
       showCap && 'bars--show-cap',
       highlightCap && 'bars--highlight-cap',
       zoomOut && 'bars--zoom-out',
+      vertical && 'bars--vertical',
     )}
   >
     {projection.map((value, i) => {
@@ -111,6 +114,11 @@ const Bars = ({
         flex-direction: column;
         justify-content: space-between;
         transition: height 0.25s ease-out;
+      }
+
+      .bars--vertical {
+        flex-direction: row;
+        opacity: 0;
       }
 
       .bars--zoom-out {
