@@ -39,6 +39,7 @@ export default class Chart extends PureComponent<Props> {
             projection={projection}
             barLabels={chartData.barLabels}
             showCap={scene.showCap}
+            highlightCap={scene.highlightCap}
           />
         );
       case 'desktop':

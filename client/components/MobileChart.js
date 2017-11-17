@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import classNames from 'class-names';
 import type { Projection } from '../types';
 
 type TicksProps = {
@@ -60,18 +61,49 @@ type BarsProps = {
   projection: Projection,
   labels: string[],
   extent: number,
+  showCap: boolean,
+  highlightCap: boolean,
+  fiscalCapValue: number,
 };
 
-const Bars = ({ projection, labels, extent }: BarsProps) => (
-  <div className="bars">
-    {projection.map((value, i) => (
-      <div key={i.toString()} className="bar" style={{ width: `${value * (100 / extent)}%` }}>
-        <div className="label">
-          {i === 0 && 'Years '}
-          {labels[i]}
+const Bars = ({ projection, labels, extent, showCap, highlightCap, fiscalCapValue }: BarsProps) => (
+  <div
+    className={classNames(
+      'bars',
+      showCap && 'bars--show-cap',
+      highlightCap && 'bars--highlight-cap',
+    )}
+  >
+    {projection.map((value, i) => {
+      const isCapYear = i === 3;
+      const multiplier = 100 / extent;
+      const valueX = value * multiplier;
+      const capX = fiscalCapValue * multiplier;
+
+      return (
+        <div className="bar-track">
+          <div className="label">
+            {i === 0 && 'Years '}
+            {labels[i]}
+          </div>
+
+          {isCapYear ? (
+            <div className="bar-shadow bar-shadow--headroom" style={{ width: `${capX}%` }}>
+              <div className="headroom-label">{`£${Math.round((fiscalCapValue - value) * 10) /
+                10}bn`}</div>
+            </div>
+          ) : null}
+
+          <div key={i.toString()} className="bar" style={{ width: `${valueX}%` }} />
+
+          {isCapYear ? (
+            <div className="fiscal-cap-marker" style={{ left: `${capX}%` }}>
+              Fiscal cap
+            </div>
+          ) : null}
         </div>
-      </div>
-    ))}
+      );
+    })}
     <style jsx>{`
       .bars {
         position: absolute;
@@ -82,18 +114,69 @@ const Bars = ({ projection, labels, extent }: BarsProps) => (
         justify-content: space-between;
       }
 
+      .bar-track {
+        position: relative;
+        height: 30px;
+        // background: #eee;
+      }
+
+      .bar-shadow {
+        height: 12px;
+        background: #ddd;
+        transition: width 0.5s ease-out;
+        position: absolute;
+        top: 16px;
+      }
+
+      .bar-shadow--headroom {
+        opacity: 0;
+        transition: opacity 0.2s ease-out;
+      }
+
+      .headroom-label {
+        transition: opacity 0.5s ease-in;
+        opacity: 0;
+        position: absolute;
+        right: 24px;
+        font-weight: 600;
+        font-size: 24px;
+        top: -8px;
+      }
+
       .bar {
         height: 12px;
         background: #1262b3;
         transition: width 0.5s ease-out;
+        position: absolute;
+        top: 16px;
       }
 
       .label {
         font-size: 14px;
         line-height: 16px;
-        position: relative;
-        top: -18px;
+        position: absolute;
         text-transform: uppercase;
+      }
+
+      .fiscal-cap-marker {
+        opacity: 0;
+        transition: opacity 0.3s ease-in;
+        border-left: 4px solid black;
+        padding: 2px 0 0 4px;
+        height: 30px;
+        position: absolute;
+        top: 8px;
+        text-transform: uppercase;
+        width: 20px;
+        font-size: 13px;
+        line-height: 13px;
+        // margin-top: -18px;
+      }
+
+      .bars--show-cap.bars--highlight-cap .headroom-label,
+      .bars--show-cap .bar-shadow--headroom,
+      .bars--show-cap .fiscal-cap-marker {
+        opacity: 1;
       }
     `}</style>
   </div>
@@ -105,7 +188,8 @@ type MobileChartProps = {
   width: number,
   projection: Projection,
   barLabels: string[],
-  // showCap: boolean,
+  showCap: boolean,
+  highlightCap: boolean,
 };
 
 const normalChartExtent = 60; // it goes up to 60%
@@ -114,16 +198,33 @@ const normalChartExtent = 60; // it goes up to 60%
  * The component responsible for rendering the chart on mobile
  */
 
-const MobileChart = ({ heading, height, width, projection, barLabels }: MobileChartProps) => (
+const MobileChart = ({
+  heading,
+  height,
+  width,
+  projection,
+  barLabels,
+  showCap,
+  highlightCap,
+}: MobileChartProps) => (
   <div className="mobile-chart">
     <h3>
       Public sector net borrowing <span>£bn</span>
     </h3>
+
     <h4>{heading}</h4>
 
     <div className="chart-area">
       <Ticks tickSize={10} extent={normalChartExtent} />
-      <Bars projection={projection} labels={barLabels} extent={normalChartExtent} />
+      <Bars
+        projection={projection}
+        labels={barLabels}
+        extent={normalChartExtent}
+        showCap={showCap}
+        highlightCap={highlightCap}
+        fiscalCapValue={40}
+      />
+      {/* {showCap && <FiscalCap value={40} extent={normalChartExtent} />} */}
     </div>
 
     <style jsx>{`
@@ -140,6 +241,7 @@ const MobileChart = ({ heading, height, width, projection, barLabels }: MobileCh
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        // outline: 1px solid red;
       }
 
       h3 {
@@ -154,10 +256,11 @@ const MobileChart = ({ heading, height, width, projection, barLabels }: MobileCh
       h4 {
         font-size: 14px;
         font-weight: 400;
-        margin: 0 0 30px;
+        margin: 0 0 10px;
       }
 
       .chart-area {
+        // outline: 1px solid blue;
         position: relative;
         flex: 1;
       }

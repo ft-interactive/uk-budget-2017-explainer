@@ -21,10 +21,10 @@ const getChartData = (): ChartData => {
       acc[s.name] = ({
         heading: s.heading,
         projectionId: s.projection,
-        showCap: s.showcap,
-        pulseCap: s.pulsecap,
-        zoomOut: s.zoomout,
-        highlightHeadroom: s.highlightheadroom,
+        showCap: Boolean(s.showcap),
+        highlightCap: Boolean(s.highlightcap),
+        zoomOut: Boolean(s.zoomout),
+        highlightHeadroom: Boolean(s.highlightheadroom),
       }: Scene);
 
       return acc;

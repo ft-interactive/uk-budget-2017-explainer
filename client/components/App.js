@@ -301,6 +301,10 @@ export default class App extends Component<AppProps, State> {
             text-transform: uppercase;
           }
 
+          .chart-container {
+            cursor: default;
+          }
+
           .app--desktop .chart-container {
             width: 50%;
           }
