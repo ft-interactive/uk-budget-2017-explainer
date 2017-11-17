@@ -42,9 +42,9 @@ const Bars = ({
     {projection.map((value, i) => {
       const isCapYear = i === CAP_YEAR_INDEX;
       const multiplier = 100 / extent;
-      const valueX = value * multiplier;
-      const capX = fiscalCap * multiplier;
-      const headroomWidth = capX - valueX;
+      const valueDimension = value * multiplier;
+      const capDimension = fiscalCap * multiplier;
+      const headroomWidth = capDimension - valueDimension;
       const smallHeadroom = headroomWidth < 40;
 
       return (
@@ -56,7 +56,7 @@ const Bars = ({
           )}
         >
           <div className="label">
-            {i === 0 && 'Years '}
+            {!vertical && i === 0 && 'Years '}
             {labels[i]}
           </div>
 
@@ -66,7 +66,7 @@ const Bars = ({
                 'bar-shadow bar-shadow--headroom',
                 isCapYear && highlightCap && smallHeadroom && 'bar-shadow--danger',
               )}
-              style={{ width: `${capX}%` }}
+              style={{ [vertical ? 'height' : 'width']: `${capDimension}%` }}
             >
               <div
                 className={classNames('headroom-label', smallHeadroom && 'headroom-label--small')}
@@ -77,7 +77,7 @@ const Bars = ({
           {ghostBars ? (
             <div
               className={classNames('ghost-bar')}
-              style={{ width: `${ghostBars[i] * multiplier}%` }}
+              style={{ [vertical ? 'height' : 'width']: `${ghostBars[i] * multiplier}%` }}
             />
           ) : null}
 
@@ -85,7 +85,7 @@ const Bars = ({
             console.log('ghostBars', ghostBars);
           })()} */}
 
-          <div className="bar" style={{ width: `${valueX}%` }} />
+          <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueDimension}%` }} />
 
           {ghostMarkers ? (
             <div
@@ -93,12 +93,15 @@ const Bars = ({
                 'ghost-marker',
                 ghostMarkers[i] <= value && 'ghost-marker--within-bar',
               )}
-              style={{ left: `${ghostMarkers[i] * multiplier}%` }}
+              style={{ [vertical ? 'bottom' : 'left']: `${ghostMarkers[i] * multiplier}%` }}
             />
           ) : null}
 
           {isCapYear ? (
-            <div className="fiscal-cap-marker" style={{ left: `${capX}%` }}>
+            <div
+              className="fiscal-cap-marker"
+              style={{ [vertical ? 'bottom' : 'left']: `${capDimension}%` }}
+            >
               Fiscal cap
             </div>
           ) : null}
@@ -114,11 +117,6 @@ const Bars = ({
         flex-direction: column;
         justify-content: space-between;
         transition: height 0.25s ease-out;
-      }
-
-      .bars--vertical {
-        flex-direction: row;
-        opacity: 0;
       }
 
       .bars--zoom-out {
@@ -200,7 +198,7 @@ const Bars = ({
         border-right: 1px dotted #999;
         top: 16px;
         position: absolute;
-        transition: background-image 1s linear 1s;
+        transition: border-color 1s linear 1s;
       }
 
       .ghost-marker--within-bar {
@@ -247,6 +245,73 @@ const Bars = ({
         background-color: #a1b2db;
       }
 
+      // VERTICAL
+      .bars--vertical {
+        flex-direction: row;
+      }
+
+      .bars--vertical {
+        transition: width 0.25s ease-out;
+      }
+
+      .bars--vertical.bars--zoom-out {
+        width: 50%;
+        height: 100%;
+      }
+
+      .bars--vertical .fiscal-cap-marker {
+        display: none;
+      }
+
+      .bars--vertical .bar-track {
+        height: 100%;
+        width: 60px;
+      }
+
+      .bars--vertical .bar {
+        width: 40px;
+        position: absolute;
+        bottom: 0;
+        top: auto;
+        transition: width 0.2s ease-out, height 0.5s ease-out, background-color 0.3s linear;
+      }
+
+      .bars--vertical.bars--zoom-out .bar {
+        width: 30px;
+        transition: width 0.25s ease-out, height 0.5s ease-out, background-color 0.3s linear;
+      }
+
+      .bars--vertical .label {
+        bottom: -20px;
+        top: auto;
+      }
+
+      .bars--vertical .ghost-marker {
+        height: 2px;
+
+        background-image: linear-gradient(to right, #999 50%, rgba(255, 255, 255, 0) 0%);
+        background-position: bottom;
+        background-size: 6px 2px;
+        background-repeat: repeat-x;
+
+        width: 40px;
+        border-right: 0;
+        // border-top: 2px dashed #888;
+        top: auto;
+        margin-bottom: -2px;
+      }
+
+      .bars--vertical .ghost-marker--within-bar {
+        border-color: #aaa;
+      }
+
+      .bars--vertical .ghost-bar {
+        width: 40px;
+        top: auto;
+        bottom: 0;
+      }
+
+      // ADJUSTMENTS
       @media (min-width: 360px) {
         .headroom-label {
           font-size: 26px;

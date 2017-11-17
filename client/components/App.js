@@ -98,10 +98,10 @@ export default class App extends Component<AppProps, State> {
     const mode = measurements.viewportWidth < 725 ? 'mobile' : 'desktop';
 
     const chartHeight =
-      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 300), 280) : 280;
+      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280) : 280;
 
     const chartWidth =
-      mode === 'desktop' ? Math.min(measurements.appWidth / 2, 500) : measurements.appWidth;
+      mode === 'desktop' ? Math.min(measurements.appWidth / 2, 400) : measurements.appWidth;
 
     const fixedChartYOffsetFromViewport =
       mode === 'desktop' ? (measurements.viewportHeight - chartHeight) / 2 : 0;
@@ -119,7 +119,7 @@ export default class App extends Component<AppProps, State> {
     const waypointOffset =
       mode === 'mobile'
         ? 0 - chartHeight + viewableTextHeight * (1 / -3)
-        : viewableTextHeight * (1 / -3);
+        : viewableTextHeight * (1 / -2);
 
     // determine the maximum scroll depth for each waypoint
     const waypoints = (() => {
@@ -311,9 +311,9 @@ export default class App extends Component<AppProps, State> {
           }
 
           .copy-container :global(hr) {
-            margin: 120px 0 25px;
+            margin: 90px 0;
             width: 80px;
-            background: rgba(0, 0, 0, 0.2);
+            background: black;
             height: 6px;
             border: 0;
 

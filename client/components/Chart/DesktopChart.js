@@ -61,7 +61,7 @@ const DesktopChart = ({
       .desktop-chart {
         // outline: 1px solid blue;
         position: relative;
-        padding: 5px 30px 10px 10px;
+        padding: 5px 30px 40px 10px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
