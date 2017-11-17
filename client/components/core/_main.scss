@@ -7,6 +7,16 @@ body {
   margin: 0;
   border: 0;
   font-family: $font-sans;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.date-and-byline {
+  .o-date {
+    margin-bottom: 0;
+  }
+  line-height: 1;
 }
 
 .article {
@@ -20,6 +30,17 @@ body {
   }
 
   &-body {
+    a {
+      color: #0d7680;
+      text-decoration: none;
+      border-bottom: 2px solid #ced4cc;
+
+      &:hover {
+        color: #08474d;
+        border-bottom-color: #9db6b2;
+      }
+    }
+
     div[data-o-grid-colspan] {
       & > div {
         // max-width: 700px;
@@ -36,7 +57,6 @@ body {
     }
   }
 }
-
 
 .graphic {
   display: block;
@@ -60,5 +80,4 @@ body {
   &-b-1 {
     max-width: 700px;
   }
-
 }

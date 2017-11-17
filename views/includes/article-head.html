@@ -26,11 +26,13 @@
   {% include "includes/share.html" %}
 {% endif %}
 
+
+<div class="date-and-byline">
 {%- if publishedDate -%}
 <span data-o-component="o-date" class="o-date o-typography-timestamp" datetime="{{ publishedDate | isotime }}">{{ publishedDate | ftdate }}</span>
 {%- endif -%}
 {%- if byline -%}
-<span class="byline">&nbsp;&nbsp;
+<span class="authors">&nbsp;&nbsp;
 {%- if byline.push -%}
   {%- for author in byline -%}
     {{ " and " if not loop.first and loop.last else (", " if not loop.first else "") }}
@@ -45,3 +47,4 @@
 {%- endif -%}
 </span>
 {%- endif -%}
+</div>
