@@ -175,19 +175,15 @@ const Bars = ({
       }
 
       .ghost-marker {
-        background-image: linear-gradient(#999 40%, rgba(255, 255, 255, 0) 0%);
-        background-position: right;
-        background-size: 2px 3.5px;
-        background-repeat: repeat-y;
         height: 12px;
-        width: 2px;
+        border-right: 1px dotted #999;
         top: 16px;
         position: absolute;
         transition: background-image 1s linear 1s;
       }
 
       .ghost-marker--within-bar {
-        background-image: linear-gradient(white 40%, rgba(255, 255, 255, 0) 0%);
+        border-color: white;
       }
 
       .label {
