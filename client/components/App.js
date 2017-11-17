@@ -275,6 +275,7 @@ export default class App extends Component<AppProps, State> {
             background: #fff1e5;
             transition: background-color 0.1s linear, box-shadow 0.05s linear;
           }
+
           .app--mobile .chart--stuck {
             background: white;
             box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
@@ -283,6 +284,11 @@ export default class App extends Component<AppProps, State> {
 
           .copy-container {
             padding: 20px 10px 0;
+          }
+
+          .copy-container :global([data-chart-scene]) {
+            // font-weight: bold;
+            border-bottom: 2px solid #1262b3;
           }
 
           .app--desktop {
@@ -295,10 +301,15 @@ export default class App extends Component<AppProps, State> {
             padding: 0 20px;
           }
 
-          .copy-container :global(h4) {
-            margin: 120px 0 12px;
-            font: 400 20px MetricWeb, sans-serif;
-            text-transform: uppercase;
+          .copy-container :global(hr) {
+            margin: 120px 0 25px;
+            width: 80px;
+            background: rgba(0, 0, 0, 0.2);
+            height: 6px;
+            border: 0;
+
+            // font: 400 20px MetricWeb, sans-serif;
+            // text-transform: uppercase;
           }
 
           .chart-container {

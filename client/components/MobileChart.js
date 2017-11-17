@@ -89,6 +89,8 @@ const Bars = ({
       const multiplier = 100 / extent;
       const valueX = value * multiplier;
       const capX = fiscalCapValue * multiplier;
+      const headroomWidth = capX - valueX;
+      const smallHeadroom = headroomWidth < 40;
 
       return (
         <div className="bar-track">
@@ -98,9 +100,16 @@ const Bars = ({
           </div>
 
           {isCapYear ? (
-            <div className="bar-shadow bar-shadow--headroom" style={{ width: `${capX}%` }}>
-              <div className="headroom-label">{`£${Math.round((fiscalCapValue - value) * 10) /
-                10}bn`}</div>
+            <div
+              className={classNames(
+                'bar-shadow bar-shadow--headroom',
+                isCapYear && highlightCap && smallHeadroom && 'bar-shadow--danger',
+              )}
+              style={{ width: `${capX}%` }}
+            >
+              <div
+                className={classNames('headroom-label', smallHeadroom && 'headroom-label--small')}
+              >{`£${Math.round((fiscalCapValue - value) * 10) / 10}bn`}</div>
             </div>
           ) : null}
 
@@ -151,8 +160,13 @@ const Bars = ({
         transition: opacity 0.2s ease-out;
       }
 
+      .bar-shadow--danger {
+        background: hsla(10, 40%, 80%, 1);
+        transition: background-color 1s linear;
+      }
+
       .headroom-label {
-        transition: opacity 0.5s ease-in;
+        transition: opacity 0.2s ease-in 0s;
         opacity: 0;
         position: absolute;
         // right: 24px;
@@ -162,6 +176,15 @@ const Bars = ({
         font-size: 20px;
         // top: -10px;
         top: -6px;
+      }
+
+      .headroom-label--small {
+        font-size: 15px;
+        top: -4px;
+      }
+
+      .bars--show-cap.bars--highlight-cap .headroom-label {
+        transition: opacity 0.8s ease-in 0.2s;
       }
 
       .bar {
@@ -182,7 +205,7 @@ const Bars = ({
 
       .fiscal-cap-marker {
         opacity: 0;
-        transition: opacity 0.3s ease-in;
+        transition: opacity 0.05s ease-in;
         border-left: 4px solid black;
         padding: 2px 0 0 4px;
         height: 30px;
@@ -259,7 +282,7 @@ const MobileChart = ({
         showCap={showCap}
         highlightCap={highlightCap}
         zoomOut={zoomOut}
-        fiscalCapValue={40}
+        fiscalCapValue={46.4}
       />
 
       <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>
