@@ -286,9 +286,11 @@ export default class App extends Component<AppProps, State> {
             padding: 20px 10px 0;
           }
 
+          // TODO maybe highlight these?
           .copy-container :global([data-chart-scene]) {
             // font-weight: bold;
-            border-bottom: 2px solid #1262b3;
+            // border-bottom: 2px solid #1262b3;
+            // background: hsla(210, 100%, 80%, 0.4);
           }
 
           .app--desktop {
