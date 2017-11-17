@@ -1,3 +1,6 @@
+// better image but too low quality:
+// http://com.ft.imagepublish.prod.s3.amazonaws.com/13435cd8-cbc9-11e7-aa33-c63fdc9b8c6c
+
 export default (environment = 'development') => ({
   // eslint-disable-line
 
@@ -36,8 +39,8 @@ export default (environment = 'development') => ({
 
     // You can also provide a URL
     url: `https://www.ft.com/__origami/service/image/v2/images/raw/${encodeURIComponent(
-      'http://ft-ig-images-prod.s3-website-eu-west-1.amazonaws.com/v1/8489052638-p75sg.png',
-    )}?source=ig`,
+      'http://com.ft.imagepublish.prod.s3.amazonaws.com/11d00ab8-cbc9-11e7-aa33-c63fdc9b8c6c',
+    )}?source=ig&width=1264&quality=medium`,
   },
 
   // Byline can by a plain string, markdown, or array of authors
