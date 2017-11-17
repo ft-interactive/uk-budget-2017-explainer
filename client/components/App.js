@@ -73,6 +73,10 @@ export default class App extends Component<AppProps, State> {
       this.fullUpdate();
     });
 
+    window.addEventListener('load', () => {
+      this.fullUpdate();
+    });
+
     // TODO enable this or something like it, maybe also check if foregrounded
     setInterval(() => {
       this.fullUpdate();
@@ -116,7 +120,7 @@ export default class App extends Component<AppProps, State> {
     const waypoints = (() => {
       // query for them [again] only if necessary
       let waypointsCache = this.waypointsCache;
-      if (!waypointsCache || !waypointsCache.some(({ el }) => el.parentNode)) {
+      if (!waypointsCache || !waypointsCache.every(({ el }) => this.element.contains(el))) {
         waypointsCache = [
           ...this.element.querySelectorAll('.copy-container [data-chart-scene]'),
         ].map(el => ({
@@ -246,8 +250,6 @@ export default class App extends Component<AppProps, State> {
         </style>
         <style jsx>{`
           .app {
-            // padding-top: 10px;
-            // outline: 1px solid blue;
             box-sizing: border-box;
             position: relative;
             max-width: 1200px;
@@ -271,11 +273,12 @@ export default class App extends Component<AppProps, State> {
 
           .app--mobile .chart {
             background: #fff1e5;
-            transition: background-color 0.5s linear, box-shadow 0.25s linear;
+            transition: background-color 0.1s linear, box-shadow 0.05s linear;
           }
           .app--mobile .chart--stuck {
             background: white;
             box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.5s ease-in, box-shadow 0.25s linear;
           }
 
           .copy-container {
@@ -290,6 +293,12 @@ export default class App extends Component<AppProps, State> {
           .app--desktop .copy-container {
             width: 50%;
             padding: 0 20px;
+          }
+
+          .copy-container :global(h4) {
+            margin: 80px 0 12px;
+            font: 400 20px MetricWeb, sans-serif;
+            text-transform: uppercase;
           }
 
           .app--desktop .chart-container {

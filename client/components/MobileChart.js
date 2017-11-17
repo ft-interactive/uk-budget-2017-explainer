@@ -66,7 +66,10 @@ const Bars = ({ projection, labels, extent }: BarsProps) => (
   <div className="bars">
     {projection.map((value, i) => (
       <div key={i.toString()} className="bar" style={{ width: `${value * (100 / extent)}%` }}>
-        <div className="label">{labels[i]}</div>
+        <div className="label">
+          {i === 0 && 'Years '}
+          {labels[i]}
+        </div>
       </div>
     ))}
     <style jsx>{`
@@ -113,7 +116,10 @@ const normalChartExtent = 60; // it goes up to 60%
 
 const MobileChart = ({ heading, height, width, projection, barLabels }: MobileChartProps) => (
   <div className="mobile-chart">
-    <h3>{heading}</h3>
+    <h3>
+      Public sector net borrowing <span>£bn</span>
+    </h3>
+    <h4>{heading}</h4>
 
     <div className="chart-area">
       <Ticks tickSize={10} extent={normalChartExtent} />
@@ -130,14 +136,23 @@ const MobileChart = ({ heading, height, width, projection, barLabels }: MobileCh
     <style jsx>{`
       .mobile-chart {
         position: relative;
-        padding: 10px 30px 40px 10px;
+        padding: 5px 30px 40px 10px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
       }
 
       h3 {
-        font-size: 18px;
+        font-size: 16px;
+        margin: 0;
+      }
+
+      h3 > span {
+        font-weight: 400;
+      }
+
+      h4 {
+        font-size: 14px;
         font-weight: 400;
         margin: 0 0 30px;
       }
