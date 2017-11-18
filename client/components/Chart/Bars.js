@@ -184,10 +184,10 @@ const Bars = ({
         opacity: 0;
         width: 100%;
         text-align: center;
-        font-size: 28px;
+        font-size: 30px;
+        top: -10px;
         font-weight: 600;
         position: absolute;
-        top: -9px;
         color: #444;
       }
 

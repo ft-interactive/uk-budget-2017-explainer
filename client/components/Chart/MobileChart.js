@@ -49,7 +49,7 @@ const MobileChart = ({
         notionalYears={notionalYears}
       />
 
-      <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>
+      <div className="zoomed-out-message">Eliminate&nbsp;borrowing by&nbsp;‘mid-2020s’</div>
     </div>
 
     <style jsx>{`
@@ -95,9 +95,9 @@ const MobileChart = ({
         position: absolute;
         height: 50%;
         color: black;
-        width: 75%;
-        padding-top: 20px;
-        padding-left: 40px;
+        max-width: 180px;
+        padding-top: 30px;
+        padding-left: 50px;
         pointer-events: none;
         transition: opacity 0 linear;
         font-weight: 600;
