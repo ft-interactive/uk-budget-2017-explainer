@@ -20,7 +20,7 @@ type BarsProps = {
   highlightCap: boolean,
   fiscalCap: number,
   zoomOut: boolean,
-  // ghostMarkers: null | number[],
+  ghostMarkers: null | Projection,
   // ghostBars: null | number[],
   vertical: boolean | void,
   notionalYears: number[],
@@ -34,7 +34,7 @@ const Bars = ({
   highlightCap,
   fiscalCap,
   zoomOut,
-  // ghostMarkers,
+  ghostMarkers,
   // ghostBars,
   notionalYears,
   vertical,
@@ -49,9 +49,6 @@ const Bars = ({
     )}
   >
     {projection.map(({ value, yearId }, i) => {
-      // const isDummy = p.dummy || false;
-      // const value = isDummy ? p.value : p;
-      invariant(typeof value === 'number', 'must be a number');
       const isCapYear = i === CAP_YEAR_INDEX;
       const multiplier = 100 / extent;
       const valueLength = value * multiplier;
@@ -60,6 +57,7 @@ const Bars = ({
 
       return (
         <div key={yearId} className={classNames('track', isCapYear && 'track--cap-year')}>
+          {/* the label, which will be shifted outside the track by CSS */}
           <div className="label">
             {!vertical && i === 0 && 'Years '}
             {labels[i]}
@@ -84,8 +82,20 @@ const Bars = ({
             </div>
           ) : null}
 
-          {/* the actual, filled bar */}
+          {/* the filled bar showing the value for this year */}
           <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueLength}%` }} />
+
+          {ghostMarkers ? (
+            <div
+              className={classNames(
+                'ghost-marker',
+                ghostMarkers[i].value <= value && 'ghost-marker--within-bar',
+              )}
+              style={{
+                [vertical ? 'bottom' : 'left']: `${ghostMarkers[i].value * multiplier}%`,
+              }}
+            />
+          ) : null}
 
           {/* cap marker */}
           {isCapYear ? (
@@ -102,8 +112,12 @@ const Bars = ({
 
     {/* notional years (always render them, so they can fade in nicely when needed) */}
     <div className="notional-years">
-      {notionalYears.map(value => (
-        <div className="notional-year" style={{ width: `${value * (100 / extent)}%` }} />
+      {notionalYears.map((value, i) => (
+        <div
+          key={i.toString()}
+          className="notional-year"
+          style={{ width: `${value * (100 / extent)}%` }}
+        />
       ))}
     </div>
 
@@ -201,6 +215,22 @@ const Bars = ({
 
       .bars--highlight-cap .track:not(.track--cap-year) .bar {
         background: ${colours.lightBlue};
+      }
+
+      .ghost-marker {
+        // outline: 3px solid red;
+        height: 100%;
+        border-left: 1px dotted #999;
+        border-right: 1px dotted #999;
+        // top: 16px;
+        position: absolute;
+        transition: border-color 0.5s linear 0s;
+        // margin-left: 1px;
+        // transform: scaleX(0.5);
+      }
+
+      .ghost-marker--within-bar {
+        border-color: white;
       }
 
       .notional-years {
