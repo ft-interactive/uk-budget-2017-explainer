@@ -18,10 +18,11 @@ const getChartData = (): ChartData => {
 
   // make an array of the values for 'notional' mid-twenties years (not to be displayed with any
   // precision)
-  const notionalYears = String(parsed.options.midTwentiesBars)
-    .split(',')
-    .slice(0, 3)
-    .map(x => Number(x.trim()));
+  // const notionalYears = String(parsed.options.midTwentiesBars)
+  //   .split(',')
+  //   .slice(0, 3)
+  //   .map(x => Number(x.trim()));
+  const notionalYears = [12, 8, 4];
 
   // make an object of projections
   const projections: ProjectionsLookup = parsed.projections.reduce((acc, p) => {

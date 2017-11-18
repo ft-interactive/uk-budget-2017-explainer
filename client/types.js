@@ -33,6 +33,8 @@ export type ChartData = {
   projections: ProjectionsLookup,
 
   fiscalCap: number,
+
+  notionalYears: number[],
 };
 
 /**

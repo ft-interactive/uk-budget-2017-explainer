@@ -7,6 +7,9 @@ import type { Projection } from '../../types';
 import colours from '../../colours';
 
 const CAP_YEAR_INDEX = 3; // index of the year 2020-21 in projection array
+const MOBILE_SQUEEZED_MARGIN = 3;
+const MOBILE_BAR_THICKNESS = 15;
+const MOBILE_TRACK_SPACING = 19;
 
 type BarsProps = {
   projection: Projection,
@@ -16,9 +19,10 @@ type BarsProps = {
   highlightCap: boolean,
   fiscalCap: number,
   zoomOut: boolean,
-  ghostMarkers: null | number[],
-  ghostBars: null | number[],
+  // ghostMarkers: null | number[],
+  // ghostBars: null | number[],
   vertical: boolean | void,
+  notionalYears: number[],
 };
 
 const Bars = ({
@@ -29,14 +33,14 @@ const Bars = ({
   highlightCap,
   fiscalCap,
   zoomOut,
-  ghostMarkers,
-  ghostBars,
+  // ghostMarkers,
+  // ghostBars,
+  notionalYears,
   vertical,
 }: BarsProps) => (
   <div
     className={classNames(
       'bars',
-
       showCap && 'bars--show-cap',
       highlightCap && 'bars--highlight-cap',
       zoomOut && 'bars--zoom-out',
@@ -60,7 +64,7 @@ const Bars = ({
             {labels[i]}
           </div>
 
-          {/* a 'well' under the bar indicating the available length until the cap */}
+          {/* a 'well' under the bar, to show how much room until the cap */}
           {isCapYear ? (
             <div>
               <div
@@ -73,7 +77,9 @@ const Bars = ({
                   [vertical ? 'bottom' : 'left']: `${valueLength}%`,
                   [vertical ? 'height' : 'width']: `${headroomLength}%`,
                 }}
-              >{`£${Math.round((fiscalCap - value) * 10) / 10}bn`}</div>
+              >
+                {`£${Math.round((fiscalCap - value) * 10) / 10}bn`}
+              </div>
             </div>
           ) : null}
 
@@ -93,15 +99,25 @@ const Bars = ({
       );
     })}
 
+    {/* notional years (always render them, so they can fade in nicely when needed) */}
+    <div className="notional-years">
+      {notionalYears.map(value => (
+        <div className="notional-year" style={{ width: `${value * (100 / extent)}%` }} />
+      ))}
+    </div>
+
     <style jsx>{`
       .bars {
-        outline: 1px dotted blue;
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+        position: absolute;
       }
 
       .track {
-        height: 15px;
-        margin-top: 20px;
-        background: rgba(0, 200, 0, 0.1);
+        transition: height 0.25s ease, margin-top 0.25s ease;
+        height: ${MOBILE_BAR_THICKNESS}px;
+        margin-top: ${MOBILE_TRACK_SPACING}px;
         position: relative;
       }
 
@@ -174,6 +190,34 @@ const Bars = ({
 
       .bars--highlight-cap .track:not(.track--cap-year) .bar {
         background: ${colours.lightBlue};
+      }
+
+      .notional-years {
+        display: none;
+      }
+
+      .notional-year {
+        opacity: 0;
+        margin-top: ${MOBILE_SQUEEZED_MARGIN}px;
+        height: ${MOBILE_BAR_THICKNESS}px;
+        background: linear-gradient(to right, rgba(56, 71, 149, 0.4) 0%, rgba(56, 71, 149, 0) 98%);
+      }
+
+      .bars--zoom-out .notional-years {
+        display: block;
+      }
+
+      .bars--zoom-out .track {
+        margin-top: ${MOBILE_SQUEEZED_MARGIN}px;
+      }
+
+      .bars--zoom-out .label {
+        opacity: 0;
+      }
+
+      .bars--zoom-out .notional-year {
+        opacity: 1;
+        transition: opacity 0.2s linear 0.3s;
       }
 
       // HORIZONTAL ADAPTATION

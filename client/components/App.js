@@ -7,6 +7,8 @@ import Chart from './Chart';
 import Copy from './Copy';
 import type { ChartData } from '../types';
 
+const MOBILE_CHART_HEIGHT = 260;
+
 const chartStuckBottomOffset = 40;
 
 type AppProps = {
@@ -98,7 +100,9 @@ export default class App extends Component<AppProps, State> {
     const mode = measurements.viewportWidth < 725 ? 'mobile' : 'desktop';
 
     const chartHeight =
-      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280) : 260;
+      mode === 'desktop'
+        ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280)
+        : MOBILE_CHART_HEIGHT;
 
     const chartWidth =
       mode === 'desktop' ? Math.min(measurements.appWidth / 2, 400) : measurements.appWidth;

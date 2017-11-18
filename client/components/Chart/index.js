@@ -41,6 +41,7 @@ export default class Chart extends PureComponent<Props> {
       fiscalCap: chartData.fiscalCap,
       ghostMarkers: scene.ghostMarkers,
       ghostBars: scene.ghostBars,
+      notionalYears: chartData.notionalYears,
     };
 
     switch (mode) {
