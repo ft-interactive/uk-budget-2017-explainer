@@ -70,7 +70,10 @@ const Bars = ({
                 style={{ [vertical ? 'height' : 'width']: `${fiscalCapLength}%` }}
               />
               <div
-                className={classNames('headroom-label')}
+                className={classNames(
+                  'headroom-label',
+                  headroomLength < 30 && 'headroom-label--small',
+                )}
                 style={{
                   [vertical ? 'bottom' : 'left']: `${valueLength}%`,
                   [vertical ? 'height' : 'width']: `${headroomLength}%`,
@@ -177,7 +180,7 @@ const Bars = ({
       }
 
       .headroom-label {
-        transition: opacity 0.05s ease-in;
+        transition: opacity 0s linear;
         opacity: 0;
         width: 100%;
         text-align: center;
@@ -188,9 +191,22 @@ const Bars = ({
         color: #444;
       }
 
+      .headroom-label--small {
+        font-size: 16px;
+        top: -2px;
+      }
+
+      @media (min-width: 450px) {
+        .headroom-label--small {
+          font-size: 18px;
+          top: -3px;
+        }
+      }
+
       .bars--highlight-cap .headroom-label {
         opacity: 1;
-        transition: opacity 0.45s ease-in 0.3s;
+        transition-duration: 0.45s;
+        transition-delay: 0.3s;
       }
 
       .fiscal-cap-marker {
