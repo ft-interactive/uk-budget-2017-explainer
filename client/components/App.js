@@ -98,7 +98,7 @@ export default class App extends Component<AppProps, State> {
     const mode = measurements.viewportWidth < 725 ? 'mobile' : 'desktop';
 
     const chartHeight =
-      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280) : 280;
+      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280) : 260;
 
     const chartWidth =
       mode === 'desktop' ? Math.min(measurements.appWidth / 2, 400) : measurements.appWidth;
@@ -109,9 +109,7 @@ export default class App extends Component<AppProps, State> {
     // determine the maximum scroll depth for each stickiness state
     const stickinessStart = this.element.offsetTop - fixedChartYOffsetFromViewport;
     const stickinessEnd =
-      this.element.offsetTop +
-      appBox.height -
-      (chartHeight + fixedChartYOffsetFromViewport + chartStuckBottomOffset);
+      this.element.offsetTop + appBox.height - (chartHeight + fixedChartYOffsetFromViewport);
 
     const viewableTextHeight = measurements.viewportHeight - (mode === 'mobile' ? chartHeight : 0);
 
@@ -273,7 +271,8 @@ export default class App extends Component<AppProps, State> {
 
           .chart--at-bottom {
             position: absolute;
-            bottom: ${chartStuckBottomOffset}px;
+            // bottom: ${chartStuckBottomOffset}px;
+            bottom: 0;
           }
 
           .app--mobile .chart {

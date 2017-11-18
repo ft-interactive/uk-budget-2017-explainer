@@ -1,5 +1,12 @@
 // @flow
 
+export type Projection = Array<{
+  yearId: string,
+  value: number,
+}>;
+
+export type ProjectionsLookup = { [projectionId: string]: Projection };
+
 export type Scene = {
   heading: string,
   projectionId: string,
@@ -11,19 +18,19 @@ export type Scene = {
   ghostBars: null | number[],
 };
 
+export type ScenesLookup = {
+  [name: string]: Scene,
+};
+
 /**
  * Cleaned-up Bertha data. Should be treated as Immutable.
  */
 export type ChartData = {
-  scenes: {
-    [name: string]: Scene,
-  },
+  scenes: ScenesLookup,
 
   barLabels: string[],
 
-  projections: {
-    [id: string]: number[],
-  },
+  projections: ProjectionsLookup,
 
   fiscalCap: number,
 };
@@ -35,7 +42,7 @@ export type ChartProps = {
   heading: string,
   height: number,
   width: number,
-  projection: number[],
+  projection: Projection,
   barLabels: string[],
   showCap: boolean,
   highlightCap: boolean,
@@ -43,4 +50,5 @@ export type ChartProps = {
   fiscalCap: number,
   ghostMarkers: null | number[],
   ghostBars: null | number[],
+  notionalYears: number[],
 };
