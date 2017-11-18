@@ -2,7 +2,7 @@
 
 import React, { PureComponent } from 'react';
 import MobileChart from './MobileChart';
-import DesktopChart from './DesktopChart';
+// import DesktopChart from './DesktopChart';
 import type { ChartData } from '../../types';
 
 type Props = {
@@ -46,9 +46,10 @@ export default class Chart extends PureComponent<Props> {
 
     switch (mode) {
       case 'mobile':
-        return <MobileChart {...childProps} />;
       case 'desktop':
-        return <DesktopChart {...childProps} />;
+        return <MobileChart {...childProps} />;
+      // case 'desktop':
+      //   return <DesktopChart {...childProps} />;
       default:
         throw new Error(`Unknown mode: ${mode}`);
     }

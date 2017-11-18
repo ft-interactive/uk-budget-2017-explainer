@@ -8,6 +8,10 @@ import Copy from './Copy';
 import type { ChartData } from '../types';
 
 const MOBILE_CHART_HEIGHT = 260;
+// const MAX_DESKTOP_CHART_HEIGHT = 400;
+// const MIN_DESKTOP_CHART_HEIGHT = 280;
+const MIN_DESKTOP_CHART_HEIGHT = 260;
+const MAX_DESKTOP_CHART_HEIGHT = 260;
 
 const chartStuckBottomOffset = 40;
 
@@ -101,7 +105,10 @@ export default class App extends Component<AppProps, State> {
 
     const chartHeight =
       mode === 'desktop'
-        ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280)
+        ? Math.max(
+            Math.min(measurements.viewportHeight * 0.75, MAX_DESKTOP_CHART_HEIGHT),
+            MIN_DESKTOP_CHART_HEIGHT,
+          )
         : MOBILE_CHART_HEIGHT;
 
     const chartWidth =
@@ -300,6 +307,20 @@ export default class App extends Component<AppProps, State> {
 
           .copy-container {
             padding: 20px 10px 0;
+          }
+
+          @media (min-width: 725px) {
+            .copy-container {
+              padding-top: 0;
+            }
+            .copy-container {
+              margin-top: -15px;
+              margin-bottom: -25px;
+            }
+
+            .app {
+              margin-bottom: 40px;
+            }
           }
 
           // TODO maybe highlight these?
