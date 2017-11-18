@@ -10,6 +10,7 @@ const CAP_YEAR_INDEX = 3; // index of the year 2020-21 in projection array
 const MOBILE_SQUEEZED_MARGIN = 3;
 const MOBILE_BAR_THICKNESS = 15;
 const MOBILE_TRACK_SPACING = 19;
+const ZOOM_TRANSITION_SECONDS = 0.5;
 
 type BarsProps = {
   projection: Projection,
@@ -115,7 +116,8 @@ const Bars = ({
       }
 
       .track {
-        transition: height 0.25s ease, margin-top 0.25s ease;
+        transition: height ${ZOOM_TRANSITION_SECONDS}s ease,
+          margin-top ${ZOOM_TRANSITION_SECONDS}s ease;
         height: ${MOBILE_BAR_THICKNESS}px;
         margin-top: ${MOBILE_TRACK_SPACING}px;
         position: relative;
@@ -193,7 +195,8 @@ const Bars = ({
       }
 
       .notional-years {
-        display: none;
+        height: 0;
+        overflow: hidden;
       }
 
       .notional-year {
@@ -204,7 +207,8 @@ const Bars = ({
       }
 
       .bars--zoom-out .notional-years {
-        display: block;
+        height: auto;
+        // display: block;
       }
 
       .bars--zoom-out .track {
@@ -217,7 +221,13 @@ const Bars = ({
 
       .bars--zoom-out .notional-year {
         opacity: 1;
-        transition: opacity 0.2s linear 0.3s;
+        transition: opacity 0.4s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
+      }
+      .bars--zoom-out .notional-year:nth-child(2) {
+        transition-delay: ${ZOOM_TRANSITION_SECONDS * 0.75 + 0.15}s;
+      }
+      .bars--zoom-out .notional-year:nth-child(3) {
+        transition-delay: ${ZOOM_TRANSITION_SECONDS * 0.75 + 0.3}s;
       }
 
       // HORIZONTAL ADAPTATION

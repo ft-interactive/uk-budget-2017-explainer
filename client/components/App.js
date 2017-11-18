@@ -269,6 +269,12 @@ export default class App extends Component<AppProps, State> {
             box-sizing: inherit;
           }
 
+          .chart {
+            // just for some mobile browsers that support it. we are fixing the position manually with the stuck class anyway, but sometimes slow devices would not render in time, so the chart would be temporarily off the screen.
+            position: sticky;
+            top: 0;
+          }
+
           .chart--stuck {
             position: fixed;
           }
