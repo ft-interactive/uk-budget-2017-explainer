@@ -49,10 +49,9 @@ const Bars = ({
       invariant(typeof value === 'number', 'must be a number');
       const isCapYear = i === CAP_YEAR_INDEX;
       const multiplier = 100 / extent;
-      const valueDimension = value * multiplier;
-      const capDimension = fiscalCap * multiplier;
-      const headroomWidth = capDimension - valueDimension;
-      const smallHeadroom = headroomWidth < 40;
+      const valueLength = value * multiplier;
+      const fiscalCapLength = fiscalCap * multiplier;
+      const headroomLength = fiscalCapLength - valueLength;
 
       return (
         <div key={yearId} className={classNames('track', isCapYear && 'track--cap-year')}>
@@ -61,7 +60,20 @@ const Bars = ({
             {labels[i]}
           </div>
 
-          <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueDimension}%` }} />
+          {isCapYear ? (
+            <div
+              className="headroom"
+              style={{
+                [vertical ? 'height' : 'width']: `${headroomLength}%`,
+                [vertical ? 'bottom' : 'left']: `${valueLength}%`,
+              }}
+            >
+              <div className="headroom-label">{`£${Math.round((fiscalCap - value) * 10) /
+                10}bn`}</div>
+            </div>
+          ) : null}
+
+          <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueLength}%` }} />
         </div>
       );
     })}
@@ -83,6 +95,39 @@ const Bars = ({
         top: -17px; // bar height, plus a bit more
         position: absolute;
         text-transform: uppercase;
+      }
+
+      .headroom {
+        position: absolute;
+        height: 100%;
+        top: 0;
+        background: ${colours.darkBlue};
+        transition: width 0.25s ease-out, background 0.15s linear;
+        box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+        background: #e1e0df;
+        opacity: 0;
+        transition: opacity 0.15s ease-in 0s;
+      }
+
+      .bars--show-cap .headroom {
+        opacity: 1;
+      }
+
+      .headroom-label {
+        transition: opacity 0.2s ease-in 0s;
+        opacity: 0;
+        position: absolute;
+      }
+
+      .bars--highlight-cap .headroom-label {
+        opacity: 1;
+        width: 100%;
+        text-align: center;
+        font-size: 28px;
+        font-weight: 600;
+        position: relative;
+        top: -9px;
+        color: #444;
       }
 
       .bar {
