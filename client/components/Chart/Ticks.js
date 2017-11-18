@@ -6,7 +6,7 @@ import classNames from 'class-names';
 type TicksProps = {
   tickSize: number,
   extent: number,
-  horizontal: boolean | void,
+  horizontal?: boolean,
 };
 
 const Ticks = ({ tickSize, extent, horizontal }: TicksProps) => (
@@ -87,5 +87,7 @@ const Ticks = ({ tickSize, extent, horizontal }: TicksProps) => (
     `}</style>
   </div>
 );
+
+Ticks.defaultProps = { horizontal: false };
 
 export default Ticks;

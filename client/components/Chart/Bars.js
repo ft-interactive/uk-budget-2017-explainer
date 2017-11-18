@@ -2,20 +2,27 @@
 
 import React from 'react';
 import classNames from 'class-names';
+import type { Projection } from '../../types';
+import colours from '../../colours';
 
 const CAP_YEAR_INDEX = 3; // index of the year 2020-21 in projection array
+const MOBILE_SQUEEZED_MARGIN = 3;
+const MOBILE_BAR_THICKNESS = 15;
+const MOBILE_TRACK_SPACING = 19;
+const ZOOM_TRANSITION_SECONDS = 0.5;
 
 type BarsProps = {
-  projection: number[],
+  projection: Projection,
   labels: string[],
   extent: number,
   showCap: boolean,
   highlightCap: boolean,
   fiscalCap: number,
   zoomOut: boolean,
-  ghostMarkers: null | number[],
-  ghostBars: null | number[],
-  vertical: boolean | void,
+  ghostMarkers: null | Projection,
+  ghostBars: null | Projection,
+  vertical?: boolean,
+  notionalYears: number[],
 };
 
 const Bars = ({
@@ -28,6 +35,7 @@ const Bars = ({
   zoomOut,
   ghostMarkers,
   ghostBars,
+  notionalYears,
   vertical,
 }: BarsProps) => (
   <div
@@ -39,68 +47,71 @@ const Bars = ({
       vertical && 'bars--vertical',
     )}
   >
-    {projection.map((value, i) => {
+    {projection.map(({ value, yearId }, i) => {
       const isCapYear = i === CAP_YEAR_INDEX;
       const multiplier = 100 / extent;
-      const valueDimension = value * multiplier;
-      const capDimension = fiscalCap * multiplier;
-      const headroomWidth = capDimension - valueDimension;
-      const smallHeadroom = headroomWidth < 40;
+      const valueLength = value * multiplier;
+      const fiscalCapLength = fiscalCap * multiplier;
+      const headroomLength = fiscalCapLength - valueLength;
 
       return (
-        <div
-          key={i.toString()}
-          className={classNames(
-            'bar-track',
-            isCapYear ? 'bar-track--cap-year' : 'bar-track--non-cap-year',
-          )}
-        >
+        <div key={yearId} className={classNames('track', isCapYear && 'track--cap-year')}>
+          {/* the label, which will be shifted outside the track by CSS */}
           <div className="label">
             {!vertical && i === 0 && 'Years '}
             {labels[i]}
           </div>
 
+          {/* a 'well' under the bar, to show how much room until the cap */}
           {isCapYear ? (
-            <div
-              className={classNames(
-                'bar-shadow bar-shadow--headroom',
-                isCapYear && highlightCap && smallHeadroom && 'bar-shadow--danger',
-              )}
-              style={{ [vertical ? 'height' : 'width']: `${capDimension}%` }}
-            >
+            <div>
               <div
-                className={classNames('headroom-label', smallHeadroom && 'headroom-label--small')}
-              >{`£${Math.round((fiscalCap - value) * 10) / 10}bn`}</div>
+                className="bar-well"
+                style={{ [vertical ? 'height' : 'width']: `${fiscalCapLength}%` }}
+              />
+              <div
+                className={classNames(
+                  'headroom-label',
+                  headroomLength < 30 && 'headroom-label--small',
+                )}
+                style={{
+                  [vertical ? 'bottom' : 'left']: `${valueLength}%`,
+                  [vertical ? 'height' : 'width']: `${headroomLength}%`,
+                }}
+              >
+                {`£${Math.round((fiscalCap - value) * 10) / 10}bn`}
+              </div>
             </div>
           ) : null}
 
+          {/* ghost bars (dotted outline to show a gap) */}
           {ghostBars ? (
             <div
-              className={classNames('ghost-bar')}
-              style={{ [vertical ? 'height' : 'width']: `${ghostBars[i] * multiplier}%` }}
+              className="ghost-bar"
+              style={{ [vertical ? 'height' : 'width']: `${ghostBars[i].value * multiplier}%` }}
             />
           ) : null}
 
-          {/* {(() => {
-            console.log('ghostBars', ghostBars);
-          })()} */}
-
-          <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueDimension}%` }} />
+          {/* the bar itself */}
+          <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueLength}%` }} />
 
           {ghostMarkers ? (
             <div
               className={classNames(
                 'ghost-marker',
-                ghostMarkers[i] <= value && 'ghost-marker--within-bar',
+                ghostMarkers[i].value <= value && 'ghost-marker--within-bar',
               )}
-              style={{ [vertical ? 'bottom' : 'left']: `${ghostMarkers[i] * multiplier}%` }}
+              style={{
+                [vertical ? 'bottom' : 'left']: `${ghostMarkers[i].value * multiplier}%`,
+              }}
             />
           ) : null}
 
+          {/* cap marker */}
           {isCapYear ? (
             <div
               className="fiscal-cap-marker"
-              style={{ [vertical ? 'bottom' : 'left']: `${capDimension}%` }}
+              style={{ [vertical ? 'bottom' : 'left']: `${fiscalCapLength}%` }}
             >
               Fiscal cap
             </div>
@@ -108,224 +119,194 @@ const Bars = ({
         </div>
       );
     })}
+
+    {/* notional years (always render them, so they can fade in nicely when needed) */}
+    <div className="notional-years">
+      {notionalYears.map((value, i) => (
+        <div
+          key={i.toString()}
+          className="notional-year"
+          style={{ width: `${value * (100 / extent)}%` }}
+        />
+      ))}
+    </div>
+
     <style jsx>{`
       .bars {
-        position: absolute;
         height: 100%;
+        overflow: hidden;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: height 0.25s ease-out;
+        position: absolute;
       }
 
-      .bars--zoom-out {
-        height: 40%;
-      }
-
-      .bars--zoom-out .label {
-        opacity: 0;
-      }
-
-      .bar-track {
+      .track {
+        transition: height ${ZOOM_TRANSITION_SECONDS}s ease,
+          margin-top ${ZOOM_TRANSITION_SECONDS}s ease;
+        height: ${MOBILE_BAR_THICKNESS}px;
+        margin-top: ${MOBILE_TRACK_SPACING}px;
         position: relative;
-        height: 30px;
       }
 
-      .bar-shadow {
-        height: 12px;
-        background: #e1e0df;
-        transition: width 0.5s ease-out;
+      .label {
+        font-size: 14px;
+        top: -17px; // bar height, plus a bit more
         position: absolute;
-        top: 16px;
-      }
-
-      .bar-shadow--headroom {
-        opacity: 0;
-        transition: opacity 0.2s ease-out;
-        box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
-      }
-
-      // .bar-shadow--danger {
-      // background: hsla(10, 40%, 80%, 1);
-      // transition: background-color 1s linear;
-      // }
-
-      // .bar-shadow--danger .headroom-label {
-      //   color: #601c2e;
-      // }
-
-      .headroom-label {
-        transition: opacity 0.2s ease-in 0s;
-        opacity: 0;
-        position: absolute;
-        // right: 24px;
-        right: 10px;
-        font-weight: 600;
-        // font-size: 26px;
-        font-size: 20px;
-        // top: -10px;
-        top: -6px;
-      }
-
-      .headroom-label--small {
-        font-size: 15px;
-        top: -4px;
-      }
-
-      .bars--show-cap.bars--highlight-cap .headroom-label {
-        transition: opacity 0.8s ease-in 0.2s;
+        text-transform: uppercase;
+        transition: opacity 0.3s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
       }
 
       .ghost-bar {
         background: hsla(210, 82%, 39%, 0.05);
         position: absolute;
-        top: 16px;
-        height: 12px;
+        height: 100%;
         border: 1px dashed hsla(210, 82%, 39%, 0.4);
       }
 
-      .bar {
-        height: 12px;
-        background: #394795;
-        transition: width 0.5s ease-out, background-color 0.3s linear;
+      .bar-well {
         position: absolute;
-        top: 16px;
+        height: 100%;
+        top: 0;
+        background: ${colours.darkBlue};
+        transition: width 0.25s ease-out, background 0.15s linear;
+        box-shadow: inset 0px 1px 4px 0px rgba(0, 0, 0, 0.2);
+        background: #e1e0df;
+        opacity: 0;
+        transition: opacity 0.15s ease-in;
       }
 
-      .ghost-marker {
-        height: 12px;
-        border-right: 1px dotted #999;
-        top: 16px;
-        position: absolute;
-        transition: border-color 1s linear 1s;
+      .bars--show-cap .bar-well {
+        opacity: 1;
+        transition: opacity 0.25s ease-in;
       }
 
-      .ghost-marker--within-bar {
-        border-color: white;
+      .headroom-label {
+        transition: opacity 0s linear;
+        opacity: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 30px;
+        top: -10px;
+        font-weight: 600;
+        position: absolute;
+        color: #444;
       }
 
-      .label {
-        transition: opacity 0.15s linear;
-        font-size: 14px;
-        line-height: 16px;
-        position: absolute;
-        text-transform: uppercase;
+      .headroom-label--small {
+        font-size: 16px;
+        top: -2px;
+      }
+
+      @media (min-width: 450px) {
+        .headroom-label--small {
+          font-size: 18px;
+          top: -3px;
+        }
+      }
+
+      .bars--highlight-cap .headroom-label {
+        opacity: 1;
+        transition-duration: 0.45s;
+        transition-delay: 0.3s;
       }
 
       .fiscal-cap-marker {
         opacity: 0;
-        transition: opacity 0.05s ease-in;
+        transition: opacity 0.05s ease-in, top 0.2s linear, height 0.2s linear,
+          background-color 0.2s linear;
         border-left: 4px solid black;
         padding: 2px 0 0 4px;
         height: 30px;
         position: absolute;
-        top: 8px;
+        top: -${(30 - 15) / 2}px;
         text-transform: uppercase;
         width: 20px;
         font-size: 13px;
         line-height: 13px;
       }
 
-      .bars--show-cap.bars--highlight-cap .headroom-label,
-      .bars--show-cap .bar-shadow--headroom,
+      .bars--zoom-out .fiscal-cap-marker {
+        border-color: #666;
+        color: transparent;
+        height: 26px;
+        top: -${(26 - 15) / 2}px;
+      }
+
       .bars--show-cap .fiscal-cap-marker {
         opacity: 1;
       }
 
-      .bars--show-cap.bars--highlight-cap .bar-track--cap-year .label {
-        font-weight: 500;
-      }
-
-      .bars--show-cap.bars--highlight-cap .bar-track--non-cap-year .label {
-        opacity: 0.7;
-      }
-
-      .bars--show-cap.bars--highlight-cap .bar-track--non-cap-year .bar {
-        background-color: #a1b2db;
-      }
-
-      // VERTICAL
-      .bars--vertical {
-        flex-direction: row;
-      }
-
-      .bars--vertical {
-        transition: width 0.25s ease-out;
-      }
-
-      .bars--vertical.bars--zoom-out {
-        width: 50%;
-        height: 100%;
-      }
-
-      .bars--vertical .fiscal-cap-marker {
-        display: none;
-      }
-
-      .bars--vertical .bar-track {
-        height: 100%;
-        width: 60px;
-      }
-
-      .bars--vertical .bar {
-        width: 40px;
+      .bar {
         position: absolute;
-        bottom: 0;
-        top: auto;
-        transition: width 0.2s ease-out, height 0.5s ease-out, background-color 0.3s linear;
+        height: 100%;
+        top: 0;
+        background: ${colours.darkBlue};
+        transition: width 0.25s ease-out, background 0.15s linear;
       }
 
-      .bars--vertical.bars--zoom-out .bar {
-        width: 30px;
-        transition: width 0.25s ease-out, height 0.5s ease-out, background-color 0.3s linear;
+      .bars--highlight-cap .track:not(.track--cap-year) .bar {
+        background: ${colours.lightBlue};
       }
 
-      .bars--vertical .label {
-        bottom: -20px;
-        top: auto;
+      .ghost-marker {
+        // outline: 3px solid red;
+        height: 100%;
+        border-left: 1px dotted #999;
+        border-right: 1px dotted #999;
+        // top: 16px;
+        position: absolute;
+        transition: border-color 0.5s linear 0s;
+        // margin-left: 1px;
+        // transform: scaleX(0.5);
       }
 
-      .bars--vertical .ghost-marker {
-        height: 2px;
-
-        background-image: linear-gradient(to right, #999 50%, rgba(255, 255, 255, 0) 0%);
-        background-position: bottom;
-        background-size: 6px 2px;
-        background-repeat: repeat-x;
-
-        width: 40px;
-        border-right: 0;
-        // border-top: 2px dashed #888;
-        top: auto;
-        margin-bottom: -2px;
+      .ghost-marker--within-bar {
+        border-color: white;
       }
 
-      .bars--vertical .ghost-marker--within-bar {
-        border-color: #aaa;
+      .notional-years {
+        height: 0;
+        overflow: hidden;
       }
 
-      .bars--vertical .ghost-bar {
-        width: 40px;
-        top: auto;
-        bottom: 0;
+      .notional-year {
+        opacity: 0;
+        margin-top: ${MOBILE_SQUEEZED_MARGIN}px;
+        height: ${MOBILE_BAR_THICKNESS}px;
+        background: linear-gradient(to right, rgba(56, 71, 149, 0.4) 0%, rgba(56, 71, 149, 0) 98%);
       }
 
-      // ADJUSTMENTS
-      @media (min-width: 360px) {
-        .headroom-label {
-          font-size: 26px;
-          top: -10px;
-        }
+      .bars--zoom-out .notional-years {
+        height: auto;
+        // display: block;
       }
 
-      @media (min-width: 410px) {
-        .headroom-label {
-          right: 20px;
-        }
+      .bars--zoom-out .track {
+        margin-top: ${MOBILE_SQUEEZED_MARGIN}px;
+      }
+
+      .bars--zoom-out .label {
+        transition: opacity ${ZOOM_TRANSITION_SECONDS * 0.2}s linear 0s;
+        opacity: 0;
+      }
+
+      .bars--zoom-out .notional-year {
+        opacity: 1;
+        transition: opacity 0.4s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
+      }
+      .bars--zoom-out .notional-year:nth-child(2) {
+        transition-delay: ${ZOOM_TRANSITION_SECONDS * 0.75 + 0.15}s;
+      }
+      .bars--zoom-out .notional-year:nth-child(3) {
+        transition-delay: ${ZOOM_TRANSITION_SECONDS * 0.75 + 0.3}s;
+      }
+
+      // HORIZONTAL ADAPTATION
+      .bars--vertical {
       }
     `}</style>
   </div>
 );
+
+Bars.defaultProps = { vertical: false };
 
 export default Bars;

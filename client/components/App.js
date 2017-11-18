@@ -7,6 +7,12 @@ import Chart from './Chart';
 import Copy from './Copy';
 import type { ChartData } from '../types';
 
+const MOBILE_CHART_HEIGHT = 260;
+// const MAX_DESKTOP_CHART_HEIGHT = 400;
+// const MIN_DESKTOP_CHART_HEIGHT = 280;
+const MIN_DESKTOP_CHART_HEIGHT = 260;
+const MAX_DESKTOP_CHART_HEIGHT = 260;
+
 const chartStuckBottomOffset = 40;
 
 type AppProps = {
@@ -98,7 +104,12 @@ export default class App extends Component<AppProps, State> {
     const mode = measurements.viewportWidth < 725 ? 'mobile' : 'desktop';
 
     const chartHeight =
-      mode === 'desktop' ? Math.max(Math.min(measurements.viewportHeight * 0.75, 400), 280) : 280;
+      mode === 'desktop'
+        ? Math.max(
+            Math.min(measurements.viewportHeight * 0.75, MAX_DESKTOP_CHART_HEIGHT),
+            MIN_DESKTOP_CHART_HEIGHT,
+          )
+        : MOBILE_CHART_HEIGHT;
 
     const chartWidth =
       mode === 'desktop' ? Math.min(measurements.appWidth / 2, 400) : measurements.appWidth;
@@ -109,9 +120,7 @@ export default class App extends Component<AppProps, State> {
     // determine the maximum scroll depth for each stickiness state
     const stickinessStart = this.element.offsetTop - fixedChartYOffsetFromViewport;
     const stickinessEnd =
-      this.element.offsetTop +
-      appBox.height -
-      (chartHeight + fixedChartYOffsetFromViewport + chartStuckBottomOffset);
+      this.element.offsetTop + appBox.height - (chartHeight + fixedChartYOffsetFromViewport);
 
     const viewableTextHeight = measurements.viewportHeight - (mode === 'mobile' ? chartHeight : 0);
 
@@ -267,13 +276,22 @@ export default class App extends Component<AppProps, State> {
             box-sizing: inherit;
           }
 
+          .chart {
+            // just for some mobile browsers that support it. we are fixing the position manually with the stuck class anyway, but sometimes slow devices would not render in time, so the chart would be temporarily off the screen.
+            position: sticky;
+            top: 0;
+            bottom: 0;
+          }
+
           .chart--stuck {
             position: fixed;
           }
 
           .chart--at-bottom {
             position: absolute;
-            bottom: ${chartStuckBottomOffset}px;
+            // bottom: ${chartStuckBottomOffset}px;
+            bottom: 0;
+            top: auto;
           }
 
           .app--mobile .chart {
@@ -289,6 +307,20 @@ export default class App extends Component<AppProps, State> {
 
           .copy-container {
             padding: 20px 10px 0;
+          }
+
+          @media (min-width: 725px) {
+            .copy-container {
+              padding-top: 0;
+            }
+            .copy-container {
+              margin-top: -15px;
+              margin-bottom: -25px;
+            }
+
+            .app {
+              margin-bottom: 40px;
+            }
           }
 
           // TODO maybe highlight these?

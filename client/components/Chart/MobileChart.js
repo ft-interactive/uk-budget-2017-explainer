@@ -24,6 +24,7 @@ const MobileChart = ({
   fiscalCap,
   ghostMarkers,
   ghostBars,
+  notionalYears,
 }: ChartProps) => (
   <div className={classNames('mobile-chart', zoomOut && 'mobile-chart--zoom-out')}>
     <h3>
@@ -34,6 +35,7 @@ const MobileChart = ({
 
     <div className="chart-area">
       <Ticks tickSize={10} extent={normalChartExtent} />
+
       <Bars
         projection={projection}
         labels={barLabels}
@@ -44,9 +46,10 @@ const MobileChart = ({
         fiscalCap={fiscalCap}
         ghostMarkers={ghostMarkers}
         ghostBars={ghostBars}
+        notionalYears={notionalYears}
       />
 
-      <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>
+      <div className="zoomed-out-message">Eliminate&nbsp;borrowing by&nbsp;‘mid-2020s’</div>
     </div>
 
     <style jsx>{`
@@ -84,33 +87,27 @@ const MobileChart = ({
         // outline: 1px solid blue;
         position: relative;
         flex: 1;
+        // overflow: hidden; // cannot hide because ticks etc. need to be in margins
       }
 
       .zoomed-out-message {
         opacity: 0;
-        bottom: -60px;
         position: absolute;
         height: 50%;
-        color: #1262b3;
-        background-image: linear-gradient(
-          to bottom,
-          rgba(18, 98, 179, 0),
-          rgba(18, 98, 179, 0) 100%
-        );
-        width: 100%;
-        padding-top: 20px;
-        text-align: center;
+        color: black;
+        max-width: 180px;
+        padding-top: 30px;
+        padding-left: 50px;
         pointer-events: none;
-        transition: opacity 0.15s ease-out, bottom 0.25s ease-out;
+        transition: opacity 0 linear;
         font-weight: 600;
-        font-size: 22px;
+        font-size: 17px;
       }
 
       .mobile-chart--zoom-out .zoomed-out-message {
         opacity: 1;
-        background: linear-gradient(to bottom, rgba(18, 98, 179, 0), rgba(18, 98, 179, 0.1) 100%);
-        bottom: -15px;
-        transition: opacity 1s ease-out 0.2s, bottom 0.45s ease-out, background-image 2s linear;
+        bottom: -0px;
+        transition: opacity 1s ease-out 0.2s;
       }
 
       @media (min-width: 490px) {
