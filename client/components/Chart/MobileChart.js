@@ -34,7 +34,7 @@ const MobileChart = ({
     <h4>{heading}</h4>
 
     <div className="chart-area">
-      <Ticks tickSize={10} extent={normalChartExtent} horizontal={false} />
+      <Ticks tickSize={10} extent={normalChartExtent} />
 
       <Bars
         projection={projection}
@@ -47,7 +47,6 @@ const MobileChart = ({
         ghostMarkers={ghostMarkers}
         ghostBars={ghostBars}
         notionalYears={notionalYears}
-        vertical={false} // why is flow requiring this?
       />
 
       <div className="zoomed-out-message">Eliminate borrowing by ‘mid&nbsp;2020s’</div>

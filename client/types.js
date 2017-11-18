@@ -50,7 +50,7 @@ export type ChartProps = {
   highlightCap: boolean,
   zoomOut: boolean,
   fiscalCap: number,
-  ghostMarkers: null | number[],
-  ghostBars: null | number[],
+  ghostMarkers: null | Projection,
+  ghostBars: null | Projection,
   notionalYears: number[],
 };

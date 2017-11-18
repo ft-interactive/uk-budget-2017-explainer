@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import invariant from 'invariant';
 import classNames from 'class-names';
 import type { Projection } from '../../types';
 import colours from '../../colours';
@@ -21,8 +20,8 @@ type BarsProps = {
   fiscalCap: number,
   zoomOut: boolean,
   ghostMarkers: null | Projection,
-  // ghostBars: null | number[],
-  vertical: boolean | void,
+  ghostBars: null | Projection,
+  vertical?: boolean,
   notionalYears: number[],
 };
 
@@ -35,7 +34,7 @@ const Bars = ({
   fiscalCap,
   zoomOut,
   ghostMarkers,
-  // ghostBars,
+  ghostBars,
   notionalYears,
   vertical,
 }: BarsProps) => (
@@ -71,7 +70,7 @@ const Bars = ({
                 style={{ [vertical ? 'height' : 'width']: `${fiscalCapLength}%` }}
               />
               <div
-                className="headroom-label"
+                className={classNames('headroom-label')}
                 style={{
                   [vertical ? 'bottom' : 'left']: `${valueLength}%`,
                   [vertical ? 'height' : 'width']: `${headroomLength}%`,
@@ -82,7 +81,15 @@ const Bars = ({
             </div>
           ) : null}
 
-          {/* the filled bar showing the value for this year */}
+          {/* ghost bars (dotted outline to show a gap) */}
+          {ghostBars ? (
+            <div
+              className="ghost-bar"
+              style={{ [vertical ? 'height' : 'width']: `${ghostBars[i].value * multiplier}%` }}
+            />
+          ) : null}
+
+          {/* the bar itself */}
           <div className="bar" style={{ [vertical ? 'height' : 'width']: `${valueLength}%` }} />
 
           {ghostMarkers ? (
@@ -143,6 +150,13 @@ const Bars = ({
         position: absolute;
         text-transform: uppercase;
         transition: opacity 0.3s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
+      }
+
+      .ghost-bar {
+        background: hsla(210, 82%, 39%, 0.05);
+        position: absolute;
+        height: 100%;
+        border: 1px dashed hsla(210, 82%, 39%, 0.4);
       }
 
       .bar-well {
@@ -276,5 +290,7 @@ const Bars = ({
     `}</style>
   </div>
 );
+
+Bars.defaultProps = { vertical: false };
 
 export default Bars;
