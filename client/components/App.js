@@ -273,6 +273,7 @@ export default class App extends Component<AppProps, State> {
             // just for some mobile browsers that support it. we are fixing the position manually with the stuck class anyway, but sometimes slow devices would not render in time, so the chart would be temporarily off the screen.
             position: sticky;
             top: 0;
+            bottom: 0;
           }
 
           .chart--stuck {
@@ -283,6 +284,7 @@ export default class App extends Component<AppProps, State> {
             position: absolute;
             // bottom: ${chartStuckBottomOffset}px;
             bottom: 0;
+            top: auto;
           }
 
           .app--mobile .chart {
