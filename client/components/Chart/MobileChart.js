@@ -93,30 +93,22 @@ const MobileChart = ({
 
       .zoomed-out-message {
         opacity: 0;
-        // bottom: -60px;
         position: absolute;
         height: 50%;
-        // color: #1262b3;
         color: black;
-        // background-image: linear-gradient(
-        //   to bottom,
-        //   rgba(18, 98, 179, 0),
-        //   rgba(18, 98, 179, 0) 100%
-        // );
         width: 75%;
         padding-top: 20px;
         padding-left: 40px;
         pointer-events: none;
-        transition: opacity 0.15s ease-out, bottom 0.25s ease-out;
+        transition: opacity 0 linear;
         font-weight: 600;
         font-size: 17px;
       }
 
       .mobile-chart--zoom-out .zoomed-out-message {
         opacity: 1;
-        // background: linear-gradient(to bottom, rgba(18, 98, 179, 0), rgba(18, 98, 179, 0.1) 100%);
         bottom: -0px;
-        transition: opacity 1s ease-out 0.2s, bottom 0.45s ease-out, background-image 2s linear;
+        transition: opacity 1s ease-out 0.2s;
       }
 
       @media (min-width: 490px) {

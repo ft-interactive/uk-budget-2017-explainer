@@ -128,6 +128,7 @@ const Bars = ({
         top: -17px; // bar height, plus a bit more
         position: absolute;
         text-transform: uppercase;
+        transition: opacity 0.3s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
       }
 
       .bar-well {
@@ -166,7 +167,8 @@ const Bars = ({
 
       .fiscal-cap-marker {
         opacity: 0;
-        transition: opacity 0.05s ease-in;
+        transition: opacity 0.05s ease-in, top 0.2s linear, height 0.2s linear,
+          background-color 0.2s linear;
         border-left: 4px solid black;
         padding: 2px 0 0 4px;
         height: 30px;
@@ -176,6 +178,13 @@ const Bars = ({
         width: 20px;
         font-size: 13px;
         line-height: 13px;
+      }
+
+      .bars--zoom-out .fiscal-cap-marker {
+        border-color: #666;
+        color: transparent;
+        height: 26px;
+        top: -${(26 - 15) / 2}px;
       }
 
       .bars--show-cap .fiscal-cap-marker {
@@ -216,6 +225,7 @@ const Bars = ({
       }
 
       .bars--zoom-out .label {
+        transition: opacity ${ZOOM_TRANSITION_SECONDS * 0.2}s linear 0s;
         opacity: 0;
       }
 
