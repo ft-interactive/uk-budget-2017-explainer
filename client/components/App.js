@@ -8,12 +8,8 @@ import Copy from './Copy';
 import type { ChartData } from '../types';
 
 const MOBILE_CHART_HEIGHT = 260;
-// const MAX_DESKTOP_CHART_HEIGHT = 400;
-// const MIN_DESKTOP_CHART_HEIGHT = 280;
 const MIN_DESKTOP_CHART_HEIGHT = 260;
 const MAX_DESKTOP_CHART_HEIGHT = 260;
-
-const chartStuckBottomOffset = 40;
 
 type AppProps = {
   copyHTML: string,
@@ -234,8 +230,8 @@ export default class App extends Component<AppProps, State> {
               <Chart
                 sceneName={sceneName}
                 mode={mode}
-                availableWidth={chartWidth}
-                availableHeight={chartHeight}
+                width={chartWidth}
+                height={chartHeight}
                 chartData={chartData}
               />
             )}
@@ -289,7 +285,6 @@ export default class App extends Component<AppProps, State> {
 
           .chart--at-bottom {
             position: absolute;
-            // bottom: ${chartStuckBottomOffset}px;
             bottom: 0;
             top: auto;
           }

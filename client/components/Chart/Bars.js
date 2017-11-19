@@ -19,8 +19,8 @@ type BarsProps = {
   highlightCap: boolean,
   fiscalCap: number,
   zoomOut: boolean,
-  ghostMarkers: null | Projection,
-  ghostBars: null | Projection,
+  ghostMarkers?: null | Projection,
+  ghostBars?: null | Projection,
   vertical?: boolean,
   notionalYears: number[],
 };
@@ -248,15 +248,11 @@ const Bars = ({
       }
 
       .ghost-marker {
-        // outline: 3px solid red;
         height: 100%;
         border-left: 1px dotted #999;
         border-right: 1px dotted #999;
-        // top: 16px;
         position: absolute;
         transition: border-color 0.5s linear 0s;
-        // margin-left: 1px;
-        // transform: scaleX(0.5);
       }
 
       .ghost-marker--within-bar {
@@ -277,7 +273,6 @@ const Bars = ({
 
       .bars--zoom-out .notional-years {
         height: auto;
-        // display: block;
       }
 
       .bars--zoom-out .track {
@@ -300,13 +295,13 @@ const Bars = ({
         transition-delay: ${ZOOM_TRANSITION_SECONDS * 0.75 + 0.3}s;
       }
 
-      // HORIZONTAL ADAPTATION
+      // overrides for horizontal bars
       .bars--vertical {
       }
     `}</style>
   </div>
 );
 
-Bars.defaultProps = { vertical: false };
+Bars.defaultProps = { vertical: false, ghostMarkers: null, ghostBars: null };
 
 export default Bars;
