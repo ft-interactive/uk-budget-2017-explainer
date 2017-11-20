@@ -256,6 +256,7 @@ export default class App extends Component<AppProps, State> {
                     mobileCollapsed: !this.state.mobileCollapsed,
                   });
                 }}
+                showCollapseButton={mode === 'mobile' && stickyStatus !== 'top'}
               />
             )}
           </div>
@@ -285,10 +286,6 @@ export default class App extends Component<AppProps, State> {
             top: 0;
             bottom: 0;
             overflow: hidden;
-          }
-
-          .graphic--at-top :global(.toggle-collapse) {
-            display: none;
           }
 
           .graphic--stuck {

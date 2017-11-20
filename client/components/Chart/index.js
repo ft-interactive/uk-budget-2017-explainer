@@ -13,6 +13,7 @@ type Props = {
   height: number,
   chartData: ChartData,
   collapsed: boolean,
+  showCollapseButton: boolean,
   onCollapseToggle: () => void,
 };
 
@@ -24,7 +25,16 @@ export default class Chart extends PureComponent<Props> {
   render() {
     // chartData never changes. The other things may change, causing this pure component to
     // re-render.
-    const { chartData, sceneName, mode, width, height, collapsed, onCollapseToggle } = this.props;
+    const {
+      chartData,
+      sceneName,
+      mode,
+      width,
+      height,
+      collapsed,
+      onCollapseToggle,
+      showCollapseButton,
+    } = this.props;
 
     const scene = chartData.scenes[sceneName];
     if (!scene) throw new Error(`Unknown scene: ${sceneName}`);
@@ -53,7 +63,7 @@ export default class Chart extends PureComponent<Props> {
 
           <h4>{heading}</h4>
 
-          <button className="toggle-collapse" onClick={onCollapseToggle} />
+          {showCollapseButton && <button className="toggle-collapse" onClick={onCollapseToggle} />}
         </header>
 
         <div className="chart-area">
