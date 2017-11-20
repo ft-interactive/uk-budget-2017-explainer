@@ -10,6 +10,10 @@ const MOBILE_SQUEEZED_MARGIN = 3;
 const MOBILE_BAR_THICKNESS = 15;
 const MOBILE_TRACK_SPACING = 19;
 const ZOOM_TRANSITION_SECONDS = 0.5;
+const DESKTOP_BAR_THICKNESS = 45;
+const DESKTOP_BAR_SQUEEZED_THICKNESS = 30;
+const DESKTOP_TRACK_SPACING = 15;
+const DESKTOP_SQUEEZED_MARGIN = 5;
 
 type BarsProps = {
   projection: Projection,
@@ -19,8 +23,8 @@ type BarsProps = {
   highlightCap: boolean,
   fiscalCap: number,
   zoomOut: boolean,
-  ghostMarkers: null | Projection,
-  ghostBars: null | Projection,
+  ghostMarkers?: null | Projection,
+  ghostBars?: null | Projection,
   vertical?: boolean,
   notionalYears: number[],
 };
@@ -56,17 +60,11 @@ const Bars = ({
 
       return (
         <div key={yearId} className={classNames('track', isCapYear && 'track--cap-year')}>
-          {/* the label, which will be shifted outside the track by CSS */}
-          <div className="label">
-            {!vertical && i === 0 && 'Years '}
-            {labels[i]}
-          </div>
-
           {/* a 'well' under the bar, to show how much room until the cap */}
           {isCapYear ? (
             <div>
               <div
-                className="bar-well"
+                className="well"
                 style={{ [vertical ? 'height' : 'width']: `${fiscalCapLength}%` }}
               />
               <div
@@ -116,17 +114,23 @@ const Bars = ({
               Fiscal cap
             </div>
           ) : null}
+
+          {/* the label, which will be shifted outside the track by CSS */}
+          <div className="label">
+            {!vertical && i === 0 && 'Years '}
+            {labels[i]}
+          </div>
         </div>
       );
     })}
 
-    {/* notional years (always render them, so they can fade in nicely when needed) */}
+    {/* notional years (render them on all scenes, so they're ready to fade in when needed) */}
     <div className="notional-years">
       {notionalYears.map((value, i) => (
         <div
           key={i.toString()}
           className="notional-year"
-          style={{ width: `${value * (100 / extent)}%` }}
+          style={{ [vertical ? 'height' : 'width']: `${value * (100 / extent)}%` }}
         />
       ))}
     </div>
@@ -134,7 +138,7 @@ const Bars = ({
     <style jsx>{`
       .bars {
         height: 100%;
-        overflow: hidden;
+        // overflow: hidden;
         width: 100%;
         position: absolute;
       }
@@ -153,6 +157,8 @@ const Bars = ({
         position: absolute;
         text-transform: uppercase;
         transition: opacity 0.3s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
+        white-space: nowrap;
+        text-align: center;
       }
 
       .ghost-bar {
@@ -162,7 +168,7 @@ const Bars = ({
         border: 1px dashed hsla(210, 82%, 39%, 0.4);
       }
 
-      .bar-well {
+      .well {
         position: absolute;
         height: 100%;
         top: 0;
@@ -174,7 +180,7 @@ const Bars = ({
         transition: opacity 0.15s ease-in;
       }
 
-      .bars--show-cap .bar-well {
+      .bars--show-cap .well {
         opacity: 1;
         transition: opacity 0.25s ease-in;
       }
@@ -248,15 +254,11 @@ const Bars = ({
       }
 
       .ghost-marker {
-        // outline: 3px solid red;
         height: 100%;
         border-left: 1px dotted #999;
         border-right: 1px dotted #999;
-        // top: 16px;
         position: absolute;
         transition: border-color 0.5s linear 0s;
-        // margin-left: 1px;
-        // transform: scaleX(0.5);
       }
 
       .ghost-marker--within-bar {
@@ -277,7 +279,6 @@ const Bars = ({
 
       .bars--zoom-out .notional-years {
         height: auto;
-        // display: block;
       }
 
       .bars--zoom-out .track {
@@ -300,13 +301,140 @@ const Bars = ({
         transition-delay: ${ZOOM_TRANSITION_SECONDS * 0.75 + 0.3}s;
       }
 
-      // HORIZONTAL ADAPTATION
+      // overrides for horizontal bars
       .bars--vertical {
+        display: flex;
+        // outline: 1px solid blue;
+      }
+
+      .bars--vertical .track {
+        height: 100%;
+        transition: width ${ZOOM_TRANSITION_SECONDS}s ease,
+          margin-left ${ZOOM_TRANSITION_SECONDS}s ease;
+        width: ${DESKTOP_BAR_THICKNESS}px;
+        margin: 0 0 0 ${DESKTOP_TRACK_SPACING}px;
+        // outline: 1px solid pink;
+      }
+
+      .bars--vertical .bar {
+        // outline: 1px solid red;
+        width: 100%;
+        top: auto;
+        bottom: 0;
+        transition: height 0.25s ease-out, background 0.15s linear;
+      }
+
+      .bars--vertical .label {
+        bottom: -20px;
+        top: auto;
+        // outline: 1px solid blue;
+        width: ${60}px;
+        margin-left: -${(60 - DESKTOP_BAR_THICKNESS) / 2}px;
+      }
+
+      // .bars--vertical .track > *:not(.bar):not(.label) {
+      //   display: none;
+      // }
+
+      .bars--vertical.bars--zoom-out .track {
+        width: ${DESKTOP_BAR_SQUEEZED_THICKNESS}px;
+      }
+
+      .bars--vertical .notional-years {
+        height: auto;
+        width: 0;
+        display: flex;
+        align-items: flex-end;
+        // outline: 1px solid purple;
+        position: relative;
+      }
+
+      .bars--vertical .notional-year {
+        margin: 0 0 0 ${DESKTOP_SQUEEZED_MARGIN}px;
+        width: ${DESKTOP_BAR_SQUEEZED_THICKNESS}px;
+
+        background: linear-gradient(to top, rgba(56, 71, 149, 0.4) 0%, rgba(56, 71, 149, 0) 98%);
+      }
+
+      .bars--vertical.bars--zoom-out .notional-years {
+        width: auto;
+      }
+
+      .bars--vertical.bars--zoom-out .track {
+        margin: 0 0 0 ${DESKTOP_SQUEEZED_MARGIN}px;
+      }
+
+      .bars--vertical .fiscal-cap-marker {
+        border-left: 0;
+        border-bottom: 4px solid black;
+        width: ${DESKTOP_BAR_THICKNESS + 10}px;
+        // outline: 1px solid blue;
+        transition: opacity 0.05s ease-in, left 0.2s linear, width 0.2s linear,
+          background-color 0.2s linear;
+        top: auto;
+        left: -5px;
+        text-align: center;
+        white-space: nowrap;
+        text-indent: -7px; // fudge
+        font-size: 15px;
+        line-height: 30px;
+      }
+
+      .bars--vertical.bars--zoom-out .fiscal-cap-marker {
+        width: ${DESKTOP_BAR_SQUEEZED_THICKNESS + 8}px;
+        left: -4px;
+      }
+
+      .bars--vertical .ghost-bar {
+        width: 100%;
+        height: auto;
+        top: auto;
+        bottom: 0;
+      }
+
+      .bars--vertical .ghost-marker {
+        width: 100%;
+        height: 0;
+        border-top: 1px dotted #999;
+        border-bottom: 1px dotted #999;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .bars--vertical .well {
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        box-shadow: inset 1px 1px 5px 0px rgba(0,0,0,0.175);
+
+        // position: absolute;
+        // height: 100%;
+        // top: 0;
+        // background: ${colours.darkBlue};
+        // transition: width 0.25s ease-out, background 0.15s linear;
+        //
+        // background: #e1e0df;
+        // opacity: 0;
+        // transition: opacity 0.15s ease-in;
+      }
+
+      .bars--vertical .headroom-label {
+        height: 100%;
+        top: auto;
+        width: 100px;
+        left: ${(100 - DESKTOP_BAR_THICKNESS) * -0.5}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bars--vertical .headroom-label--small {
+        font-size: 30px;
       }
     `}</style>
   </div>
 );
 
-Bars.defaultProps = { vertical: false };
+Bars.defaultProps = { vertical: false, ghostMarkers: null, ghostBars: null };
 
 export default Bars;

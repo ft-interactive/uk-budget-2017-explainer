@@ -66,6 +66,7 @@
     "imagemin-webpack-plugin": "^1.5.0-beta.0",
     "invariant": "^2.2.2",
     "jsdom": "^11.1.0",
+    "lodash": "^4.17.4",
     "markdown-it": "^8.3.1",
     "minimist": "^1.2.0",
     "mocha": "^3.4.2",

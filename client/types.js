@@ -14,8 +14,8 @@ export type Scene = {
   highlightCap: boolean,
   zoomOut: boolean,
   highlightHeadroom: boolean,
-  ghostMarkers: null | number[],
-  ghostBars: null | number[],
+  ghostMarkers: null | Projection,
+  ghostBars: null | Projection,
 };
 
 export type ScenesLookup = {

@@ -1,9 +1,9 @@
 // @flow
 
 const colours = Object.freeze({
-  darkBlue: '#394a92',
+  darkBlue: '#0F5499',
   darkBlueHue: 229,
-  lightBlue: '#a1b2db',
+  lightBlue: '#A4B3CC',
 });
 
 export default colours;
