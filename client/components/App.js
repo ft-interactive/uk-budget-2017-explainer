@@ -1,5 +1,6 @@
 // @flow
 
+import _ from 'lodash';
 import React, { Component } from 'react';
 import invariant from 'invariant';
 import classNames from 'class-names';
@@ -10,6 +11,7 @@ import type { ChartData } from '../types';
 const MOBILE_CHART_HEIGHT = 260;
 const MIN_DESKTOP_CHART_HEIGHT = 260;
 const MAX_DESKTOP_CHART_HEIGHT = 260;
+const IDEAL_DESKTOP_CHART_HEIGHT_PROPORTION = 0.75; // proportion of viewport height
 
 type AppProps = {
   copyHTML: string,
@@ -24,6 +26,7 @@ type Measurements = {
 };
 
 type State = {
+  mobileCollapsed: boolean,
   scrollY: number,
   measurements: Measurements,
   mode: 'mobile' | 'desktop',
@@ -48,6 +51,7 @@ type WaypointsCache = Array<{ el: HTMLElement, name: string }>;
 
 export default class App extends Component<AppProps, State> {
   state: State = {
+    mobileCollapsed: false,
     mode: 'mobile',
     scrollY: 0,
     measurements: {
@@ -101,9 +105,10 @@ export default class App extends Component<AppProps, State> {
 
     const chartHeight =
       mode === 'desktop'
-        ? Math.max(
-            Math.min(measurements.viewportHeight * 0.75, MAX_DESKTOP_CHART_HEIGHT),
+        ? _.clamp(
+            measurements.viewportHeight * IDEAL_DESKTOP_CHART_HEIGHT_PROPORTION,
             MIN_DESKTOP_CHART_HEIGHT,
+            MAX_DESKTOP_CHART_HEIGHT,
           )
         : MOBILE_CHART_HEIGHT;
 
@@ -200,16 +205,19 @@ export default class App extends Component<AppProps, State> {
       fixedChartYOffsetFromViewport,
       sceneName,
       live,
+      mobileCollapsed,
     } = this.state;
 
-    let which;
+    let stickyStatus;
     if (scrollY < stickinessStart) {
-      which = 'top';
+      stickyStatus = 'top';
     } else if (scrollY > stickinessEnd) {
-      which = 'bottom';
+      stickyStatus = 'bottom';
     } else {
-      which = 'middle';
+      stickyStatus = 'middle';
     }
+
+    const collapsed = mode === 'mobile' && stickyStatus !== 'top' && mobileCollapsed;
 
     return (
       <div
@@ -218,13 +226,21 @@ export default class App extends Component<AppProps, State> {
           if (el) this.element = el;
         }}
       >
-        <div className="chart-container">
+        <div className="graphic-space-reserver" style={{ height: `${chartHeight}px` }}>
           <div
             className={classNames(
-              'chart',
-              which === 'middle' && 'chart--stuck',
-              which === 'bottom' && 'chart--at-bottom',
+              'graphic',
+              stickyStatus === 'top' && 'graphic--at-top',
+              stickyStatus === 'middle' && 'graphic--stuck',
+              stickyStatus === 'bottom' && 'graphic--at-bottom',
             )}
+            style={{
+              // height: `${graphicContainerHeight}px`,
+              height: collapsed ? '50px' : `${chartHeight}px`,
+              width: `${chartWidth}px`,
+              top: stickyStatus === 'middle' ? `${fixedChartYOffsetFromViewport}px` : '',
+              display: stickyStatus === 'bottom' && collapsed ? 'none' : '',
+            }}
           >
             {live && (
               <Chart
@@ -233,6 +249,13 @@ export default class App extends Component<AppProps, State> {
                 width={chartWidth}
                 height={chartHeight}
                 chartData={chartData}
+                collapsed={collapsed}
+                onCollapseToggle={() => {
+                  this.setState({
+                    ...this.state,
+                    mobileCollapsed: !this.state.mobileCollapsed,
+                  });
+                }}
               />
             )}
           </div>
@@ -242,22 +265,6 @@ export default class App extends Component<AppProps, State> {
           <Copy copyHTML={copyHTML} />
         </div>
 
-        <style jsx>
-          {`
-            .chart-container {
-              height: ${chartHeight}px;
-            }
-
-            .chart {
-              height: ${chartHeight}px;
-              width: ${chartWidth}px;
-            }
-
-            .chart--stuck {
-              top: ${fixedChartYOffsetFromViewport}px;
-            }
-          `}
-        </style>
         <style jsx>{`
           .app {
             box-sizing: border-box;
@@ -272,29 +279,34 @@ export default class App extends Component<AppProps, State> {
             box-sizing: inherit;
           }
 
-          .chart {
+          .graphic {
             // just for some mobile browsers that support it. we are fixing the position manually with the stuck class anyway, but sometimes slow devices would not render in time, so the chart would be temporarily off the screen.
             position: sticky;
             top: 0;
             bottom: 0;
+            overflow: hidden;
           }
 
-          .chart--stuck {
+          .graphic--at-top :global(.toggle-collapse) {
+            display: none;
+          }
+
+          .graphic--stuck {
             position: fixed;
           }
 
-          .chart--at-bottom {
+          .graphic--at-bottom {
             position: absolute;
             bottom: 0;
             top: auto;
           }
 
-          .app--mobile .chart {
+          .app--mobile .graphic {
             background: #fff1e5;
             transition: background-color 0.1s linear, box-shadow 0.05s linear;
           }
 
-          .app--mobile .chart--stuck {
+          .app--mobile .graphic--stuck {
             background: white;
             box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
             transition: background-color 0.5s ease-in, box-shadow 0.25s linear;
@@ -348,11 +360,11 @@ export default class App extends Component<AppProps, State> {
             // text-transform: uppercase;
           }
 
-          .chart-container {
+          .graphic-space-reserver {
             cursor: default;
           }
 
-          .app--desktop .chart-container {
+          .app--desktop .graphic-space-reserver {
             width: 50%;
           }
         `}</style>

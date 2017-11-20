@@ -66,7 +66,7 @@ const Bars = ({
           {isCapYear ? (
             <div>
               <div
-                className="bar-well"
+                className="well"
                 style={{ [vertical ? 'height' : 'width']: `${fiscalCapLength}%` }}
               />
               <div
@@ -120,7 +120,7 @@ const Bars = ({
       );
     })}
 
-    {/* notional years (always render them, so they can fade in nicely when needed) */}
+    {/* notional years (render them on all scenes, so they're ready to fade in when needed) */}
     <div className="notional-years">
       {notionalYears.map((value, i) => (
         <div
@@ -162,7 +162,7 @@ const Bars = ({
         border: 1px dashed hsla(210, 82%, 39%, 0.4);
       }
 
-      .bar-well {
+      .well {
         position: absolute;
         height: 100%;
         top: 0;
@@ -174,7 +174,7 @@ const Bars = ({
         transition: opacity 0.15s ease-in;
       }
 
-      .bars--show-cap .bar-well {
+      .bars--show-cap .well {
         opacity: 1;
         transition: opacity 0.25s ease-in;
       }

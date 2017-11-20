@@ -36,7 +36,6 @@ const Ticks = ({ tickSize, extent, horizontal }: TicksProps) => (
 
       .tick {
         position: absolute;
-        // outline: 1px solid blue;
       }
 
       .label {
