@@ -57,9 +57,7 @@ export default class Chart extends PureComponent<Props> {
         }}
       >
         <header>
-          <h3>
-            Public sector net borrowing <span>£bn</span>
-          </h3>
+          <h3>Public sector net borrowing, £bn</h3>
 
           <h4>{heading}</h4>
 
@@ -83,7 +81,7 @@ export default class Chart extends PureComponent<Props> {
             vertical={mode === 'desktop'}
           />
 
-          <div className="zoomed-out-message">Eliminate&nbsp;borrowing by&nbsp;‘mid-2020s’</div>
+          <div className="zoomed-out-message">Eliminate borrowing by ‘mid-2020s’</div>
         </div>
 
         <style jsx>{`
@@ -131,14 +129,19 @@ export default class Chart extends PureComponent<Props> {
             margin: 0;
           }
 
-          h3 > span {
-            font-weight: 400;
-          }
-
           h4 {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 400;
             margin: 0 0 10px;
+            color: #66605c;
+          }
+
+          .chart--desktop h3 {
+            font-size: 20px;
+          }
+
+          .chart--desktop h4 {
+            font-size: 16px;
           }
 
           .chart-area {
@@ -158,6 +161,12 @@ export default class Chart extends PureComponent<Props> {
             transition: opacity 0 linear;
             font-weight: 600;
             font-size: 17px;
+          }
+
+          .chart--desktop .zoomed-out-message {
+            right: 20px;
+            text-align: center;
+            max-width: 145px;
           }
 
           .chart--zoom-out .zoomed-out-message {
