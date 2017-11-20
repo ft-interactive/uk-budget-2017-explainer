@@ -9,8 +9,8 @@ import Copy from './Copy';
 import type { ChartData } from '../types';
 
 const MOBILE_CHART_HEIGHT = 260;
-const MIN_DESKTOP_CHART_HEIGHT = 260;
-const MAX_DESKTOP_CHART_HEIGHT = 260;
+const MIN_DESKTOP_CHART_HEIGHT = 300;
+const MAX_DESKTOP_CHART_HEIGHT = 450;
 const IDEAL_DESKTOP_CHART_HEIGHT_PROPORTION = 0.75; // proportion of viewport height
 
 type AppProps = {
@@ -290,6 +290,7 @@ export default class App extends Component<AppProps, State> {
 
           .graphic--stuck {
             position: fixed;
+            overflow: visible;
           }
 
           .graphic--at-bottom {

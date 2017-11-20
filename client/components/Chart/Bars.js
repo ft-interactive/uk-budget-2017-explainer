@@ -10,6 +10,8 @@ const MOBILE_SQUEEZED_MARGIN = 3;
 const MOBILE_BAR_THICKNESS = 15;
 const MOBILE_TRACK_SPACING = 19;
 const ZOOM_TRANSITION_SECONDS = 0.5;
+const DESKTOP_BAR_THICKNESS = 45;
+const DESKTOP_TRACK_SPACING = 15;
 
 type BarsProps = {
   projection: Projection,
@@ -56,12 +58,6 @@ const Bars = ({
 
       return (
         <div key={yearId} className={classNames('track', isCapYear && 'track--cap-year')}>
-          {/* the label, which will be shifted outside the track by CSS */}
-          <div className="label">
-            {!vertical && i === 0 && 'Years '}
-            {labels[i]}
-          </div>
-
           {/* a 'well' under the bar, to show how much room until the cap */}
           {isCapYear ? (
             <div>
@@ -116,6 +112,12 @@ const Bars = ({
               Fiscal cap
             </div>
           ) : null}
+
+          {/* the label, which will be shifted outside the track by CSS */}
+          <div className="label">
+            {!vertical && i === 0 && 'Years '}
+            {labels[i]}
+          </div>
         </div>
       );
     })}
@@ -134,7 +136,7 @@ const Bars = ({
     <style jsx>{`
       .bars {
         height: 100%;
-        overflow: hidden;
+        // overflow: hidden;
         width: 100%;
         position: absolute;
       }
@@ -153,6 +155,10 @@ const Bars = ({
         position: absolute;
         text-transform: uppercase;
         transition: opacity 0.3s linear ${ZOOM_TRANSITION_SECONDS * 0.75}s;
+        white-space: nowrap;
+        width: ${60}px;
+        margin-left: -${(60 - DESKTOP_BAR_THICKNESS) / 2}px;
+        text-align: center;
       }
 
       .ghost-bar {
@@ -297,6 +303,35 @@ const Bars = ({
 
       // overrides for horizontal bars
       .bars--vertical {
+        display: flex;
+        outline: 1px solid blue;
+      }
+
+      .bars--vertical .track {
+        height: 100%;
+        transition: width ${ZOOM_TRANSITION_SECONDS}s ease,
+          margin-left ${ZOOM_TRANSITION_SECONDS}s ease;
+        width: ${DESKTOP_BAR_THICKNESS}px;
+        margin: 0 0 0 ${DESKTOP_TRACK_SPACING}px;
+        outline: 1px solid pink;
+      }
+
+      .bars--vertical .bar {
+        outline: 1px solid red;
+        width: 100%;
+        top: auto;
+        bottom: 0;
+        transition: height 0.25s ease-out, background 0.15s linear;
+      }
+
+      .bars--vertical .label {
+        bottom: -20px;
+        top: auto;
+        outline: 1px solid blue;
+      }
+
+      .bars--vertical .track > *:not(.bar):not(.label) {
+        display: none;
       }
     `}</style>
   </div>
