@@ -24,4 +24,13 @@ body {
       }
     }
   }
+    &__outro {
+      & .source {
+          >span{
+            font: 600 16px/150% MetricWeb, sans-serif;
+          }
+        color: oColorsGetPaletteColor('black-60');
+        font: 400 18px/150% MetricWeb, sans-serif;
+      }
+    }
 }
